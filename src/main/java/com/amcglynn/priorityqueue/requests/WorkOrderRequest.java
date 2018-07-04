@@ -1,5 +1,7 @@
 package com.amcglynn.priorityqueue.requests;
 
+import com.amcglynn.priorityqueue.validation.annotations.Date;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -11,7 +13,7 @@ public class WorkOrderRequest {
     @Max(Long.MAX_VALUE)
     private Long userId;
 
-    @NotNull
+    @Date
     private String date;
 
     public WorkOrderRequest() {

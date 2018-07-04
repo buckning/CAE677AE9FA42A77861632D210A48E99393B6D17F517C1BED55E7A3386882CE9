@@ -27,7 +27,7 @@ public class PriorityQueueWebMvcTests {
 
     @Test
     public void testEnqueueEndpointReturnsSuccessfully() throws Exception {
-        String request = new ObjectMapper().writeValueAsString(new WorkOrderRequest(1L, "today"));
+        String request = new ObjectMapper().writeValueAsString(new WorkOrderRequest(1L, "01012018"));
         mockMvc.perform(post("/queue")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -38,17 +38,17 @@ public class PriorityQueueWebMvcTests {
     @Test
     public void testPostToQueueEndpointReturns400BadRequestWhenIdIsLessThanAllowed() throws Exception {
         verifyBadRequestIsReturnedByQueueEndpoint(new ObjectMapper()
-                .writeValueAsString(new WorkOrderRequest(0L, "today")));
+                .writeValueAsString(new WorkOrderRequest(0L, "01012018")));
     }
 
     @Test
     public void testPostToQueueEndpointReturns400BadRequestWhenIdIsGreaterThanAllowed() throws Exception {
-        verifyBadRequestIsReturnedByQueueEndpoint("{\"userId\": 9223372036854775808, \"date\": \"today\"}");
+        verifyBadRequestIsReturnedByQueueEndpoint("{\"userId\": 9223372036854775808, \"date\": \"01012018\"}");
     }
 
     @Test
     public void testPostToQueueEndpointReturns400BadRequestWhenIdIsNotInRequest() throws Exception {
-        verifyBadRequestIsReturnedByQueueEndpoint("{\"date\": \"today\"}");
+        verifyBadRequestIsReturnedByQueueEndpoint("{\"date\": \"01012018\"}");
     }
 
     @Test
