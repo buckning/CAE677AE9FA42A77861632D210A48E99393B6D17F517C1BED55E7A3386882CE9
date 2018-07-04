@@ -26,7 +26,7 @@ public class PriorityQueueWebMvcTests {
     private MockMvc mockMvc;
 
     @Test
-    public void testEnqueueEndpointReturns() throws Exception {
+    public void testEnqueueEndpointReturnsSuccessfully() throws Exception {
         String request = new ObjectMapper().writeValueAsString(new WorkOrderRequest(1L, "today"));
         mockMvc.perform(post("/queue")
                 .content(request)
@@ -37,27 +37,28 @@ public class PriorityQueueWebMvcTests {
 
     @Test
     public void testPostToQueueEndpointReturns400BadRequestWhenIdIsLessThanAllowed() throws Exception {
-        String request = new ObjectMapper().writeValueAsString(new WorkOrderRequest(0L, "today"));
-        mockMvc.perform(post("/queue")
-                .content(request)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(status().isBadRequest());
+        verifyBadRequestIsReturnedByQueueEndpoint(new ObjectMapper()
+                .writeValueAsString(new WorkOrderRequest(0L, "today")));
     }
 
     @Test
     public void testPostToQueueEndpointReturns400BadRequestWhenIdIsGreaterThanAllowed() throws Exception {
-        String request = "{\"userId\": 9223372036854775808, \"date\": \"today\"}";
-        mockMvc.perform(post("/queue")
-                .content(request)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(status().isBadRequest());
+        verifyBadRequestIsReturnedByQueueEndpoint("{\"userId\": 9223372036854775808, \"date\": \"today\"}");
     }
 
     @Test
     public void testPostToQueueEndpointReturns400BadRequestWhenIdIsNotInRequest() throws Exception {
-        String request = "{\"date\": \"today\"}";
+        verifyBadRequestIsReturnedByQueueEndpoint("{\"date\": \"today\"}");
+    }
+
+    @Test
+    public void testPostToQueueEndpointReturns400BadRequestWhenDateIsNotInRequest() throws Exception {
+        verifyBadRequestIsReturnedByQueueEndpoint("{\"userId\": 1}");
+    }
+
+    private void verifyBadRequestIsReturnedByQueueEndpoint(String badRequest) throws Exception {
         mockMvc.perform(post("/queue")
-                .content(request)
+                .content(badRequest)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isBadRequest());
     }

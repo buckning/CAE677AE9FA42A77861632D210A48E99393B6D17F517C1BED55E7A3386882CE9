@@ -16,7 +16,7 @@ public class WorkOrderRequest {
 
     public WorkOrderRequest() {
         this.userId = 0L;
-        this.date = "invalid";
+        this.date = null;
     }
 
     public WorkOrderRequest(Long userId, String date) {
