@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -33,6 +34,35 @@ public class PriorityQueueWebMvcTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(equalTo(request)));
+    }
+
+    @Test
+    public void testDeleteEndpointReturnsSuccessfully() throws Exception {
+        String userId = "1";
+        mockMvc.perform(delete("/queue/" + userId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void testDeleteEndpointReturns400BadRequestWhenUserIdIsGreaterThanMax() throws Exception {
+        verifyBadRequestByDeleteFromQueueEndpoint("9223372036854775808");
+    }
+
+    @Test
+    public void testDeleteEndpointReturns400BadRequestWhenUserIdIsNotALong() throws Exception {
+        verifyBadRequestByDeleteFromQueueEndpoint("baddata");
+    }
+
+    @Test
+    public void testDeleteEndpointReturns400BadRequestWhenUserIdIsNull() throws Exception {
+        verifyBadRequestByDeleteFromQueueEndpoint(null);
+    }
+
+    private void verifyBadRequestByDeleteFromQueueEndpoint(String userId) throws Exception {
+        mockMvc.perform(delete("/queue/" + userId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest());
     }
 
     @Test
