@@ -16,6 +16,7 @@ POST
 ### Request Headers
 
 | Header name | Description |
+| --- | --- |
 | Content-Type | Content type of the request. application/json is the only supported content type |
 
 ### Request Body
@@ -122,11 +123,13 @@ DELETE
 
 ### URL Parameters
 | Parameter name | Description |
+| --- | --- |
 | id    | ID to be deleted |
 
 ### Request Headers
 
 | Header name | Description |
+| --- | --- |
 | Content-Type | Content type of the request. application/json is the only supported content type |
 
 ### Request Body
@@ -155,6 +158,7 @@ http://(baseurl)/api/v1/queue/\<id\>
 
 ### URL Parameters
 | Parameter name | Description |
+| --- | --- |
 | id    | ID to be deleted |
 
 ### Method
@@ -163,6 +167,7 @@ GET
 ### Request Headers
 
 | Header name | Description |
+| --- | --- |
 | Content-Type | Content type of the request. application/json is the only supported content type |
 
 ### Request Body

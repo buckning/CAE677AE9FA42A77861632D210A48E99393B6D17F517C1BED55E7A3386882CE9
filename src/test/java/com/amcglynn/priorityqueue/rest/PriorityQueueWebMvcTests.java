@@ -1,4 +1,4 @@
-package com.amcglynn.priorityqueue;
+package com.amcglynn.priorityqueue.rest;
 
 import com.amcglynn.priorityqueue.requests.WorkOrderRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
