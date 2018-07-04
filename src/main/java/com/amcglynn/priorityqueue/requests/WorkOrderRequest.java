@@ -11,6 +11,7 @@ public class WorkOrderRequest {
     @Max(Long.MAX_VALUE)
     private Long userId;
 
+    @NotNull
     private String date;
 
     public WorkOrderRequest() {
