@@ -1,6 +1,7 @@
 package com.amcglynn.priorityqueue.service;
 
 import com.amcglynn.priorityqueue.ClassIdType;
+import com.amcglynn.priorityqueue.DateProvider;
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;
 import org.slf4j.Logger;
@@ -8,16 +9,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @Service("priorityQueueService")
 public class PriorityQueueService {
     private static final Logger LOG = LoggerFactory.getLogger(PriorityQueueService.class);
 
     @Autowired
     private InMemoryQueue inMemoryQueue;
+
+    @Autowired
+    private DateProvider dateProvider;
 
     public void createEntryInQueue(Long id, String date) {
         if(inMemoryQueue.contains(id)) {
@@ -28,16 +28,15 @@ public class PriorityQueueService {
         inMemoryQueue.create(id, date);
     }
 
-    public Long getTimeDifferenceInSeconds(String startTime, String endTime) {
-        long differenceInSeconds;
-        try {
-            Date startDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").parse(startTime);
-            Date endDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").parse(endTime);
-            differenceInSeconds = (endDate.getTime() - startDate.getTime()) / 1000;
-        } catch (ParseException e) {
-            differenceInSeconds = -1;
+    public Long getRank(ClassIdType classIdType, String date) {
+        Long numberOfSecondsInQueue = dateProvider.getTimeDifferenceInSeconds(date, dateProvider.getCurrentTime());
+
+        Long rank = -1L;
+
+        if (classIdType == ClassIdType.NORMAL) {
+            rank = numberOfSecondsInQueue;
         }
-        return differenceInSeconds;
+        return rank;
     }
 
     public ClassIdType getClassId(Long id) {

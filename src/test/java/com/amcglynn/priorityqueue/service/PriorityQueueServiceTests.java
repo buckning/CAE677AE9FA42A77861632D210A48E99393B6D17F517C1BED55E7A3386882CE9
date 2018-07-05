@@ -1,6 +1,7 @@
 package com.amcglynn.priorityqueue.service;
 
 import com.amcglynn.priorityqueue.ClassIdType;
+import com.amcglynn.priorityqueue.DateProvider;
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import java.util.Date;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,6 +26,9 @@ public class PriorityQueueServiceTests {
 
     @Mock
     private InMemoryQueue inMemoryQueueMock;
+
+    @Mock
+    private DateProvider dateProviderMock;
 
     @InjectMocks
     private PriorityQueueService service;
@@ -40,6 +45,13 @@ public class PriorityQueueServiceTests {
     public void testCreateEntryInQueueCompletesSuccessfully() {
         service.createEntryInQueue(1L, "01012018");
         verify(inMemoryQueueMock, times(1)).create(1L, "01012018");
+    }
+
+    @Test
+    public void testGetRankReturnsTheNumberOfSecondsInTheQueueForNormalId() {
+        when(dateProviderMock.getCurrentTime()).thenReturn("2018-01-01-00-00-10");
+        when(dateProviderMock.getTimeDifferenceInSeconds(anyString(), anyString())).thenReturn(new Long(10L));
+        assertThat(service.getRank(ClassIdType.NORMAL, "2018-01-01-00-00-00")).isEqualTo(10L);
     }
 
     @Test
@@ -60,15 +72,5 @@ public class PriorityQueueServiceTests {
     @Test
     public void testGetIdClassForManagementOverrideId() {
         assertThat(service.getClassId(15L)).isEqualTo(ClassIdType.MANAGEMENT_OVERRIDE);
-    }
-
-    @Test
-    public void testGetTimeDifferenceInSecondsReturnsTheCorrectValue() {
-        assertThat(service.getTimeDifferenceInSeconds("2018-07-05-00-00-00", "2018-07-05-00-00-10")).isEqualTo(10L);
-    }
-
-    @Test
-    public void testGetTimeDifferenceInSecondsReturnsErrorCodeWhenCouldNotParseText() {
-        assertThat(service.getTimeDifferenceInSeconds("2018-07-05-00-0000", "2018-07-05-00-00-10")).isEqualTo(-1);
     }
 }

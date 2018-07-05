@@ -11,4 +11,9 @@ public class PriorityQueueConfig {
     public InMemoryQueue inMemoryQueue() {
         return new InMemoryQueue();
     }
+
+    @Bean
+    public DateProvider dateProvider() {
+        return new DateProvider();
+    }
 }
