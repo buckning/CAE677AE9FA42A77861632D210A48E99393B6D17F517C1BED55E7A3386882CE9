@@ -4,10 +4,10 @@ import com.amcglynn.priorityqueue.validation.annotations.Date;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class DateValidator implements ConstraintValidator<Date, String> {
-
-    private static final String VALID_DATE_REGEX = "([0-9]){8}";
 
     @Override
     public void initialize(Date uri) {
@@ -19,6 +19,11 @@ public class DateValidator implements ConstraintValidator<Date, String> {
             return false;
         }
 
-        return input.matches(VALID_DATE_REGEX);
+        try {
+            new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").parse(input);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 }

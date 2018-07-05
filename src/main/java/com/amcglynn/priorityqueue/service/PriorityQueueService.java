@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Service("priorityQueueService")
 public class PriorityQueueService {
     private static final Logger LOG = LoggerFactory.getLogger(PriorityQueueService.class);
@@ -20,6 +24,20 @@ public class PriorityQueueService {
             LOG.info("Could not create entry in queue for ID: {} as entry already exists", id);
             throw new ConflictException();
         }
+
+        inMemoryQueue.create(id, date);
+    }
+
+    public Long getTimeDifferenceInSeconds(String startTime, String endTime) {
+        long differenceInSeconds;
+        try {
+            Date startDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").parse(startTime);
+            Date endDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").parse(endTime);
+            differenceInSeconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        } catch (ParseException e) {
+            differenceInSeconds = -1;
+        }
+        return differenceInSeconds;
     }
 
     public ClassIdType getClassId(Long id) {

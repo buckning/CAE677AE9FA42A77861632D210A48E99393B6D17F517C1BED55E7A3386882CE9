@@ -37,6 +37,11 @@ POST
 }
 ```
 
+| Parameter name | Description |
+| --- | --- |
+| userId | Must be a number between 1 - 9223372036854775807 |
+| date | Must be a string in the format of yyyy-MM-dd-HH-mm-ss |
+
 ### Response Body
 ```
 {

@@ -9,9 +9,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,6 +39,7 @@ public class PriorityQueueServiceTests {
     @Test
     public void testCreateEntryInQueueCompletesSuccessfully() {
         service.createEntryInQueue(1L, "01012018");
+        verify(inMemoryQueueMock, times(1)).create(1L, "01012018");
     }
 
     @Test
@@ -56,4 +62,13 @@ public class PriorityQueueServiceTests {
         assertThat(service.getClassId(15L)).isEqualTo(ClassIdType.MANAGEMENT_OVERRIDE);
     }
 
+    @Test
+    public void testGetTimeDifferenceInSecondsReturnsTheCorrectValue() {
+        assertThat(service.getTimeDifferenceInSeconds("2018-07-05-00-00-00", "2018-07-05-00-00-10")).isEqualTo(10L);
+    }
+
+    @Test
+    public void testGetTimeDifferenceInSecondsReturnsErrorCodeWhenCouldNotParseText() {
+        assertThat(service.getTimeDifferenceInSeconds("2018-07-05-00-0000", "2018-07-05-00-00-10")).isEqualTo(-1);
+    }
 }

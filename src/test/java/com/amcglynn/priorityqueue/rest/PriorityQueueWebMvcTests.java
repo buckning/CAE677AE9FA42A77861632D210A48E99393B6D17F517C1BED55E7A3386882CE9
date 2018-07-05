@@ -11,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,9 +27,11 @@ public class PriorityQueueWebMvcTests {
     @Autowired
     private MockMvc mockMvc;
 
+    private String date = "2018-01-01-00-00-00";
+
     @Test
     public void testEnqueueEndpointReturnsSuccessfully() throws Exception {
-        String request = new ObjectMapper().writeValueAsString(new WorkOrderRequest(1L, "01012018"));
+        String request = new ObjectMapper().writeValueAsString(new WorkOrderRequest(1L, date));
         mockMvc.perform(post("/queue")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))

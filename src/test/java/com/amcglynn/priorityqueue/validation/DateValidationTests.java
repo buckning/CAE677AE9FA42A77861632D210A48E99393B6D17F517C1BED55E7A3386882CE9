@@ -23,7 +23,7 @@ public class DateValidationTests {
 
     @Test
     public void testValidDateFormatPassesValidation() {
-        WorkOrderRequest workOrderRequest = new WorkOrderRequest(1L, "01012018");
+        WorkOrderRequest workOrderRequest = new WorkOrderRequest(1L, "2018-01-01-00-00-00");
         Set<ConstraintViolation<WorkOrderRequest>> violations = validator.validate(workOrderRequest);
         assertThat(violations.isEmpty()).isTrue();
     }
