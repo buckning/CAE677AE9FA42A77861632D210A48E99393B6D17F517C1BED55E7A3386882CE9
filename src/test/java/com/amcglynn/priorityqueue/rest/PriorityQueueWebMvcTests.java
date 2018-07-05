@@ -11,8 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -42,6 +45,32 @@ public class PriorityQueueWebMvcTests {
         mockMvc.perform(delete("/queue/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void testGetTopIdFromQueueReturnsSuccessfully() throws Exception {
+        mockMvc.perform(get("/queue/top")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(equalTo(new ObjectMapper()
+                        .writeValueAsString(new WorkOrderRequest(1L, "01012018")))));
+    }
+
+    @Test
+    public void testGetIdFromQueueReturnsSuccessfully() throws Exception {
+        String id = "1";
+        mockMvc.perform(get("/queue/" + id)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isOk())
+        .andExpect(content().string(equalTo(new ObjectMapper()
+                .writeValueAsString(new WorkOrderRequest(1L, "01012018")))));
+    }
+
+    @Test
+    public void testGetAllIdsFromQueueReturnsSuccessfully() throws Exception {
+        mockMvc.perform(get("/queue")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isOk());
     }
 
     @Test

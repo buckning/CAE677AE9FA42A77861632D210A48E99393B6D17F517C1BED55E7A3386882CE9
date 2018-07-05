@@ -24,6 +24,13 @@ public class PriorityQueueControllerTests {
     }
 
     @Test
+    public void testGetIdFromQueueReturns400BadRequestWhenUserIdIsLessThanTheMinimumValue() throws Exception {
+        Throwable throwable = catchThrowable(() -> controller.getIdFromQueue(0L));
+        assertThat(throwable).isNotNull();
+        assertThat(throwable).isInstanceOf(BadRequestException.class);
+    }
+
+    @Test
     public void testDeleteFromQueueEndpointReturns400BadRequestWhenUserIdIsLessThanTheMinimumValue() throws Exception {
         Throwable throwable = catchThrowable(() -> controller.deleteFromQueue(0L));
         assertThat(throwable).isNotNull();

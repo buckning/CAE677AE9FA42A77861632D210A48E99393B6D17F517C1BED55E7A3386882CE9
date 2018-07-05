@@ -38,22 +38,22 @@ public class PriorityQueueServiceTests {
 
     @Test
     public void testGetIdClassForNormalId() {
-        assertThat(service.getIdClass(1L)).isEqualTo(ClassIdType.NORMAL);
+        assertThat(service.getClassId(1L)).isEqualTo(ClassIdType.NORMAL);
     }
 
     @Test
     public void testGetIdClassForPriorityId() {
-        assertThat(service.getIdClass(3L)).isEqualTo(ClassIdType.PRIORITY);
+        assertThat(service.getClassId(3L)).isEqualTo(ClassIdType.PRIORITY);
     }
 
     @Test
     public void testGetIdClassForVipId() {
-        assertThat(service.getIdClass(5L)).isEqualTo(ClassIdType.VIP);
+        assertThat(service.getClassId(5L)).isEqualTo(ClassIdType.VIP);
     }
 
     @Test
     public void testGetIdClassForManagementOverrideId() {
-        assertThat(service.getIdClass(15L)).isEqualTo(ClassIdType.MANAGEMENT_OVERRIDE);
+        assertThat(service.getClassId(15L)).isEqualTo(ClassIdType.MANAGEMENT_OVERRIDE);
     }
 
 }

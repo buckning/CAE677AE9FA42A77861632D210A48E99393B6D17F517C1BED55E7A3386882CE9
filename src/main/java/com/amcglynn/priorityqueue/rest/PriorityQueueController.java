@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 public class PriorityQueueController {
@@ -35,4 +39,21 @@ public class PriorityQueueController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RequestMapping(value = "queue/{userId}", method = GET)
+    public WorkOrderRequest getIdFromQueue(@PathVariable("userId") Long userId) {
+        if (userId < 1) {
+            throw new BadRequestException();
+        }
+        return new WorkOrderRequest(1L, "01012018");
+    }
+
+    @RequestMapping(value = "queue/top", method = GET)
+    public WorkOrderRequest getTopIdFromQueue() {
+        return new WorkOrderRequest(1L, "01012018");
+    }
+
+    @RequestMapping(value = "queue", method = GET)
+    public List<WorkOrderRequest> getAllIdsFromQueue() {
+        return Arrays.asList(new WorkOrderRequest(1L, "01012018"));
+    }
 }

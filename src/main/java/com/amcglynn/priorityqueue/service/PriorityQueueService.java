@@ -22,7 +22,7 @@ public class PriorityQueueService {
         }
     }
 
-    public ClassIdType getIdClass(Long id) {
+    public ClassIdType getClassId(Long id) {
         ClassIdType result;
         boolean priorityId = id % 3 == 0;
         boolean vipId = id % 5 == 0;
