@@ -1,3 +1,13 @@
+# Build the project and run tests
+```
+mvn verify
+```
+
+# Deploy the service
+```
+mvn spring-boot:run
+```
+
 # Queue Service API Definition
 
 # Add to queue

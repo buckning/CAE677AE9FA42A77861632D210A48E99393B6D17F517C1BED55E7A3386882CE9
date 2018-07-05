@@ -1,5 +1,6 @@
 package com.amcglynn.priorityqueue.service;
 
+import com.amcglynn.priorityqueue.ClassIdType;
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;
 import org.junit.Test;
@@ -34,4 +35,25 @@ public class PriorityQueueServiceTests {
     public void testCreateEntryInQueueCompletesSuccessfully() {
         service.createEntryInQueue(1L, "01012018");
     }
+
+    @Test
+    public void testGetIdClassForNormalId() {
+        assertThat(service.getIdClass(1L)).isEqualTo(ClassIdType.NORMAL);
+    }
+
+    @Test
+    public void testGetIdClassForPriorityId() {
+        assertThat(service.getIdClass(3L)).isEqualTo(ClassIdType.PRIORITY);
+    }
+
+    @Test
+    public void testGetIdClassForVipId() {
+        assertThat(service.getIdClass(5L)).isEqualTo(ClassIdType.VIP);
+    }
+
+    @Test
+    public void testGetIdClassForManagementOverrideId() {
+        assertThat(service.getIdClass(15L)).isEqualTo(ClassIdType.MANAGEMENT_OVERRIDE);
+    }
+
 }
