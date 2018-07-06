@@ -4,6 +4,7 @@ import com.amcglynn.priorityqueue.ClassIdType;
 import com.amcglynn.priorityqueue.DateProvider;
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;
+import com.amcglynn.priorityqueue.responses.WorkOrderResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -43,8 +44,17 @@ public class PriorityQueueServiceTests {
 
     @Test
     public void testCreateEntryInQueueCompletesSuccessfully() {
-        service.createEntryInQueue(1L, "01012018");
-        verify(inMemoryQueueMock, times(1)).create(1L, "01012018");
+        Long userId = 1L;
+        String date = "2018-01-01-00-00-00";
+        when(dateProviderMock.getCurrentTime()).thenReturn("2018-01-01-00-00-10");
+        when(dateProviderMock.getTimeDifferenceInSeconds(anyString(), anyString())).thenReturn(new Long(10L));
+
+        WorkOrderResponse response = service.createEntryInQueue(userId, date);
+
+        verify(inMemoryQueueMock, times(1)).create(1L, date);
+        assertThat(response.getDate()).isEqualTo(date);
+        assertThat(response.getRank()).isEqualTo(10L);
+        assertThat(response.getUserId()).isEqualTo(1L);
     }
 
     @Test

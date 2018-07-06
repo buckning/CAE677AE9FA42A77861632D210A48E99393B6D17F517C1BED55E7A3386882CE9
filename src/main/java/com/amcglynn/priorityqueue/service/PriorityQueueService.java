@@ -4,6 +4,7 @@ import com.amcglynn.priorityqueue.ClassIdType;
 import com.amcglynn.priorityqueue.DateProvider;
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;
+import com.amcglynn.priorityqueue.responses.WorkOrderResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,15 @@ public class PriorityQueueService {
     @Autowired
     private DateProvider dateProvider;
 
-    public void createEntryInQueue(Long id, String date) {
+    public WorkOrderResponse createEntryInQueue(Long id, String date) {
         if(inMemoryQueue.contains(id)) {
             LOG.info("Could not create entry in queue for ID: {} as entry already exists", id);
             throw new ConflictException();
         }
 
         inMemoryQueue.create(id, date);
+
+        return new WorkOrderResponse(id, getRank(getClassId(id), date), date);
     }
 
     public Long getRank(ClassIdType classIdType, String date) {

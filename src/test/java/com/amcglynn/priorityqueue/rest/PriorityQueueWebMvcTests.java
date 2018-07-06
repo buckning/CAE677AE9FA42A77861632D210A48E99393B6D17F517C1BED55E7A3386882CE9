@@ -35,8 +35,7 @@ public class PriorityQueueWebMvcTests {
         mockMvc.perform(post("/queue")
                 .content(request)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(equalTo(request)));
+                .andDo(print()).andExpect(status().isOk());
     }
 
     @Test

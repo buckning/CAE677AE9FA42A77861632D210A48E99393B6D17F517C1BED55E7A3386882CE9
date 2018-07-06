@@ -2,6 +2,7 @@ package com.amcglynn.priorityqueue.rest;
 
 import com.amcglynn.priorityqueue.exceptions.BadRequestException;
 import com.amcglynn.priorityqueue.requests.WorkOrderRequest;
+import com.amcglynn.priorityqueue.responses.WorkOrderResponse;
 import com.amcglynn.priorityqueue.service.PriorityQueueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,9 +27,8 @@ public class PriorityQueueController {
     private PriorityQueueService priorityQueueService;
 
     @RequestMapping(value = "queue", method = POST)
-    public WorkOrderRequest enqueue(@Valid @RequestBody WorkOrderRequest request) {
-        priorityQueueService.createEntryInQueue(request.getUserId(), request.getDate());
-        return request;
+    public WorkOrderResponse enqueue(@Valid @RequestBody WorkOrderRequest request) {
+        return priorityQueueService.createEntryInQueue(request.getUserId(), request.getDate());
     }
 
     @RequestMapping(value = "queue/{userId}", method = DELETE)

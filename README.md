@@ -46,7 +46,8 @@ POST
 ```
 {
     "userId": <Long>,
-    "date": <date>
+    "date": <date>,
+    "rank": <Long>
 }
 ```
 
