@@ -51,7 +51,7 @@ public class PriorityQueueServiceTests {
 
         WorkOrderResponse response = service.createEntryInQueue(userId, date);
 
-        verify(inMemoryQueueMock, times(1)).create(1L, date);
+        verify(inMemoryQueueMock, times(1)).create(1L, date, ClassIdType.NORMAL, 10L);
         assertThat(response.getDate()).isEqualTo(date);
         assertThat(response.getRank()).isEqualTo(10L);
         assertThat(response.getUserId()).isEqualTo(1L);

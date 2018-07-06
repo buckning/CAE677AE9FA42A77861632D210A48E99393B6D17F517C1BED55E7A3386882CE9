@@ -26,9 +26,11 @@ public class PriorityQueueService {
             throw new ConflictException();
         }
 
-        inMemoryQueue.create(id, date);
+        ClassIdType classIdType = getClassId(id);
+        Long rank = getRank(classIdType, date);
+        inMemoryQueue.create(id, date, classIdType, rank);
 
-        return new WorkOrderResponse(id, getRank(getClassId(id), date), date);
+        return new WorkOrderResponse(id, rank, date);
     }
 
     public Long getRank(ClassIdType classIdType, String date) {

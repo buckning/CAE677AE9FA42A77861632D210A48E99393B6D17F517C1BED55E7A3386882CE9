@@ -1,5 +1,6 @@
 package com.amcglynn.priorityqueue.dal;
 
+import com.amcglynn.priorityqueue.ClassIdType;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,7 +12,7 @@ public class InMemoryQueueTest {
     @Test
     public void testCreateInsertsValueIntoQueue() {
         InMemoryQueue inMemoryQueue = new InMemoryQueue();
-        inMemoryQueue.create(userId, date);
+        inMemoryQueue.create(userId, date, ClassIdType.NORMAL, 10L);
         assertThat(inMemoryQueue.getDate(userId)).isEqualTo(date);
     }
 
@@ -24,14 +25,14 @@ public class InMemoryQueueTest {
     @Test
     public void testContainsReturnsTrueIfInQueue() {
         InMemoryQueue inMemoryQueue = new InMemoryQueue();
-        inMemoryQueue.create(userId, date);
+        inMemoryQueue.create(userId, date, ClassIdType.NORMAL, 10L);
         assertThat(inMemoryQueue.contains(userId)).isTrue();
     }
 
     @Test
     public void testDeleteFromQueue() {
         InMemoryQueue inMemoryQueue = new InMemoryQueue();
-        inMemoryQueue.create(userId, date);
+        inMemoryQueue.create(userId, date, ClassIdType.NORMAL, 10L);
         assertThat(inMemoryQueue.contains(userId)).isTrue();
         assertThat(inMemoryQueue.getDate(userId)).isEqualTo(date);
         inMemoryQueue.delete(userId);
