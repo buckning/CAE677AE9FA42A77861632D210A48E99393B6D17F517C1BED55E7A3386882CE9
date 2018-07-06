@@ -37,4 +37,10 @@ public class InMemoryQueueTest {
         inMemoryQueue.delete(userId);
         assertThat(inMemoryQueue.contains(userId)).isFalse();
     }
+
+    @Test
+    public void testGetPosition() {
+        InMemoryQueue inMemoryQueue = new InMemoryQueue();
+        assertThat(inMemoryQueue.getUserPosition(userId)).isEqualTo(100L);
+    }
 }

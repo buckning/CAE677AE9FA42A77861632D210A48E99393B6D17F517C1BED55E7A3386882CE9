@@ -2,6 +2,7 @@ package com.amcglynn.priorityqueue.rest;
 
 import com.amcglynn.priorityqueue.exceptions.BadRequestException;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;
+import com.amcglynn.priorityqueue.responses.GetPositionResponse;
 import com.amcglynn.priorityqueue.service.PriorityQueueService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PriorityQueueControllerTests {
@@ -34,6 +36,13 @@ public class PriorityQueueControllerTests {
         Throwable throwable = catchThrowable(() -> controller.getIdFromQueue(0L));
         assertThat(throwable).isNotNull();
         assertThat(throwable).isInstanceOf(BadRequestException.class);
+    }
+
+    @Test
+    public void testGetIdFromQueueCompletesSuccessfully() throws Exception {
+        when(serviceMock.getUserPositionFromQueue(1L)).thenReturn(5L);
+        GetPositionResponse response = controller.getIdFromQueue(1L);
+        assertThat(response.getPosition()).isEqualTo(5L);
     }
 
     @Test

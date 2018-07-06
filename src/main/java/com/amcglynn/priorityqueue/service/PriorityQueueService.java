@@ -42,6 +42,10 @@ public class PriorityQueueService {
         return rank;
     }
 
+    public Long getUserPositionFromQueue(Long id) {
+        return inMemoryQueue.getUserPosition(id);
+    }
+
     public ClassIdType getClassId(Long id) {
         ClassIdType result;
         boolean priorityId = id % 3 == 0;

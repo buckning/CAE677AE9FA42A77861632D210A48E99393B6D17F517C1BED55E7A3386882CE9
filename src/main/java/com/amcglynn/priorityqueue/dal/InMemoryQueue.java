@@ -25,6 +25,11 @@ public class InMemoryQueue implements QueueDao {
         queue.remove(id);
     }
 
+    @Override
+    public Long getUserPosition(Long id) {
+        return 100L;
+    }
+
     public String getDate(Long id) {
         return queue.get(id);
     }

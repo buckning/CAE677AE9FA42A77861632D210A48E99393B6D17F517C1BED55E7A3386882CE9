@@ -1,6 +1,7 @@
 package com.amcglynn.priorityqueue.rest;
 
 import com.amcglynn.priorityqueue.requests.WorkOrderRequest;
+import com.amcglynn.priorityqueue.responses.GetPositionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,7 +63,7 @@ public class PriorityQueueWebMvcTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isOk())
         .andExpect(content().string(equalTo(new ObjectMapper()
-                .writeValueAsString(new WorkOrderRequest(1L, "01012018")))));
+                .writeValueAsString(new GetPositionResponse(100L)))));
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.amcglynn.priorityqueue.rest;
 
 import com.amcglynn.priorityqueue.exceptions.BadRequestException;
 import com.amcglynn.priorityqueue.requests.WorkOrderRequest;
+import com.amcglynn.priorityqueue.responses.GetPositionResponse;
 import com.amcglynn.priorityqueue.responses.WorkOrderResponse;
 import com.amcglynn.priorityqueue.service.PriorityQueueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +42,11 @@ public class PriorityQueueController {
     }
 
     @RequestMapping(value = "queue/{userId}", method = GET)
-    public WorkOrderRequest getIdFromQueue(@PathVariable("userId") Long userId) {
+    public GetPositionResponse getIdFromQueue(@PathVariable("userId") Long userId) {
         if (userId < 1) {
             throw new BadRequestException();
         }
-        return new WorkOrderRequest(1L, "01012018");
+        return new GetPositionResponse(priorityQueueService.getUserPositionFromQueue(userId));
     }
 
     @RequestMapping(value = "queue/top", method = GET)
