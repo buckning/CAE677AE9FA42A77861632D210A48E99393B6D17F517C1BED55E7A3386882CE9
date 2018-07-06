@@ -36,6 +36,7 @@ public class PriorityQueueController {
         if (userId < 1) {
             throw new BadRequestException();
         }
+        priorityQueueService.removeFromQueue(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

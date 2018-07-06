@@ -5,23 +5,36 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class InMemoryQueueTest {
+    private String date = "2018-01-01-00-00-00";
+    private Long userId = 1L;
+
     @Test
     public void testCreateInsertsValueIntoQueue() {
         InMemoryQueue inMemoryQueue = new InMemoryQueue();
-        inMemoryQueue.create(1L, "01012018");
-        assertThat(inMemoryQueue.getDate(1L)).isEqualTo("01012018");
+        inMemoryQueue.create(userId, date);
+        assertThat(inMemoryQueue.getDate(userId)).isEqualTo(date);
     }
 
     @Test
     public void testContainsReturnsFalseIfNotInQueue() {
         InMemoryQueue inMemoryQueue = new InMemoryQueue();
-        assertThat(inMemoryQueue.contains(1L)).isFalse();
+        assertThat(inMemoryQueue.contains(userId)).isFalse();
     }
 
     @Test
     public void testContainsReturnsTrueIfInQueue() {
         InMemoryQueue inMemoryQueue = new InMemoryQueue();
-        inMemoryQueue.create(1L, "01012018");
-        assertThat(inMemoryQueue.contains(1L)).isTrue();
+        inMemoryQueue.create(userId, date);
+        assertThat(inMemoryQueue.contains(userId)).isTrue();
+    }
+
+    @Test
+    public void testDeleteFromQueue() {
+        InMemoryQueue inMemoryQueue = new InMemoryQueue();
+        inMemoryQueue.create(userId, date);
+        assertThat(inMemoryQueue.contains(userId)).isTrue();
+        assertThat(inMemoryQueue.getDate(userId)).isEqualTo(date);
+        inMemoryQueue.delete(userId);
+        assertThat(inMemoryQueue.contains(userId)).isFalse();
     }
 }

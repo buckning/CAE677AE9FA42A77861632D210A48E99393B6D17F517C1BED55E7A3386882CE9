@@ -20,6 +20,11 @@ public class InMemoryQueue implements QueueDao {
         return queue.get(id) != null;
     }
 
+    @Override
+    public void delete(Long id) {
+        queue.remove(id);
+    }
+
     public String getDate(Long id) {
         return queue.get(id);
     }

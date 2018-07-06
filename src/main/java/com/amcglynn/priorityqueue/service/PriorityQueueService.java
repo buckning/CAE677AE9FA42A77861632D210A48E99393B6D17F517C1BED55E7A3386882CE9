@@ -60,4 +60,8 @@ public class PriorityQueueService {
 
         return result;
     }
+
+    public void removeFromQueue(Long userId) {
+        inMemoryQueue.delete(userId);
+    }
 }

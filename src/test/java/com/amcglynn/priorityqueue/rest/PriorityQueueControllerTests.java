@@ -11,9 +11,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PriorityQueueControllerTests {
+
+    @Mock
+    private PriorityQueueService serviceMock;
 
     @InjectMocks
     private PriorityQueueController controller;
@@ -21,6 +26,7 @@ public class PriorityQueueControllerTests {
     @Test
     public void testDeleteFromQueueEndpointCompletesSuccessfully() throws Exception {
         controller.deleteFromQueue(1L);
+        verify(serviceMock, times(1)).removeFromQueue(1L);
     }
 
     @Test
