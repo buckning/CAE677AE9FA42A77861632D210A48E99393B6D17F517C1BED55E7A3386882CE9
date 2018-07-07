@@ -51,9 +51,7 @@ public class PriorityQueueWebMvcTests {
     public void testGetTopIdFromQueueReturnsSuccessfully() throws Exception {
         mockMvc.perform(get("/queue/top")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(equalTo(new ObjectMapper()
-                        .writeValueAsString(new WorkOrderRequest(1L, "01012018")))));
+                .andDo(print()).andExpect(status().isOk());
     }
 
     @Test

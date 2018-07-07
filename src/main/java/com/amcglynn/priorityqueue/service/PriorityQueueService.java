@@ -2,13 +2,18 @@ package com.amcglynn.priorityqueue.service;
 
 import com.amcglynn.priorityqueue.ClassIdType;
 import com.amcglynn.priorityqueue.DateProvider;
+import com.amcglynn.priorityqueue.PriorityQueueComparator;
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
+import com.amcglynn.priorityqueue.dal.QueueEntry;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;
+import com.amcglynn.priorityqueue.exceptions.NotFoundException;
 import com.amcglynn.priorityqueue.responses.WorkOrderResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("priorityQueueService")
 public class PriorityQueueService {
@@ -31,6 +36,20 @@ public class PriorityQueueService {
         inMemoryQueue.create(id, date, classIdType, rank);
 
         return new WorkOrderResponse(id, rank, date);
+    }
+
+    public WorkOrderResponse getFromTopRequestFromQueue() {
+        List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
+
+        if (allEntries.size() == 0) {
+            throw new NotFoundException();
+        }
+
+        allEntries.sort(new PriorityQueueComparator(dateProvider));
+
+        QueueEntry entry = allEntries.remove(0);
+        inMemoryQueue.delete(entry.getId());
+        return new WorkOrderResponse(entry.getId(), entry.getRank(), entry.getDate());
     }
 
     public Long getRank(ClassIdType classIdType, String date) {

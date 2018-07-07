@@ -1,6 +1,7 @@
 package com.amcglynn.priorityqueue.dal;
 
 import com.amcglynn.priorityqueue.ClassIdType;
+import com.amcglynn.priorityqueue.responses.WorkOrderResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,10 @@ public class InMemoryQueue implements QueueDao {
     @Override
     public Long getUserPosition(Long id) {
         return 100L;
+    }
+
+    public List<QueueEntry> getAllEntries() {
+        return new ArrayList<>(queueEntryList);
     }
 
     public String getDate(Long id) {

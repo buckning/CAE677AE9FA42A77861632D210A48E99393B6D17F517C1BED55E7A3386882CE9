@@ -50,8 +50,8 @@ public class PriorityQueueController {
     }
 
     @RequestMapping(value = "queue/top", method = GET)
-    public WorkOrderRequest getTopIdFromQueue() {
-        return new WorkOrderRequest(1L, "01012018");
+    public WorkOrderResponse getTopIdFromQueue() {
+        return priorityQueueService.getFromTopRequestFromQueue();
     }
 
     @RequestMapping(value = "queue", method = GET)
