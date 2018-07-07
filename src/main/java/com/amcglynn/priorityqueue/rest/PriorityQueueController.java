@@ -55,7 +55,7 @@ public class PriorityQueueController {
     }
 
     @RequestMapping(value = "queue", method = GET)
-    public List<WorkOrderRequest> getAllIdsFromQueue() {
-        return Arrays.asList(new WorkOrderRequest(1L, "01012018"));
+    public List<WorkOrderResponse> getAllIdsFromQueue() {
+        return priorityQueueService.getAllEntries();
     }
 }

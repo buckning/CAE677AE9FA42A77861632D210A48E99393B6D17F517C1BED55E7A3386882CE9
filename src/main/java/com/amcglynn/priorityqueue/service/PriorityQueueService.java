@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("priorityQueueService")
 public class PriorityQueueService {
@@ -36,6 +37,15 @@ public class PriorityQueueService {
         inMemoryQueue.create(id, date, classIdType, rank);
 
         return new WorkOrderResponse(id, rank, date);
+    }
+
+    public List<WorkOrderResponse> getAllEntries() {
+        List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
+        allEntries.sort(new PriorityQueueComparator(dateProvider));
+        return allEntries.stream()
+                .map((queueEntry -> new WorkOrderResponse(queueEntry.getId(),
+                        queueEntry.getRank(), queueEntry.getDate())))
+                .collect(Collectors.toList());
     }
 
     public WorkOrderResponse getFromTopRequestFromQueue() {

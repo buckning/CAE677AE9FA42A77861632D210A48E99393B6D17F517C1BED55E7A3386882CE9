@@ -88,6 +88,28 @@ public class PriorityQueueServiceTests {
     }
 
     @Test
+    public void testGetAllEntriesFromQueueReturnsAnEmptyListWhenTheDbIsEmpty() {
+        when(inMemoryQueueMock.getAllEntries()).thenReturn(Arrays.asList());
+        List<WorkOrderResponse> responses = service.getAllEntries();
+        assertThat(responses.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void testGetAllEntriesFromQueue() {
+        List<QueueEntry> unorderedMockQueueContents = new ArrayList<>();
+        QueueEntry qe1 = new QueueEntry(1L, "2018-01-01-00-00-01", ClassIdType.NORMAL, 1L);
+        QueueEntry qe2 = new QueueEntry(2L, "2018-01-01-00-00-02", ClassIdType.NORMAL, 2L);
+        unorderedMockQueueContents.add(qe1);
+        unorderedMockQueueContents.add(qe2);
+
+        when(inMemoryQueueMock.getAllEntries()).thenReturn(unorderedMockQueueContents);
+        List<WorkOrderResponse> responses = service.getAllEntries();
+        assertThat(responses.size()).isEqualTo(2);
+        assertThat(responses.get(0).getUserId()).isEqualTo(qe2.getId());
+        assertThat(responses.get(1).getUserId()).isEqualTo(qe1.getId());
+    }
+
+    @Test
     public void testGetFromTopRequestFromQueueThrowsNotFoundExceptionWhenTheQueueIsEmpty() {
         when(inMemoryQueueMock.getAllEntries()).thenReturn(Arrays.asList());
         Throwable throwable = catchThrowable(() -> service.getFromTopRequestFromQueue());
