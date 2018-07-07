@@ -1,8 +1,18 @@
 package com.amcglynn.priorityqueue;
 
 public enum ClassIdType {
-    NORMAL,
-    PRIORITY,
-    VIP,
-    MANAGEMENT_OVERRIDE
+    NORMAL(0),
+    PRIORITY(1),
+    VIP(2),
+    MANAGEMENT_OVERRIDE(3);
+
+    private Integer priority;
+
+    ClassIdType(Integer priority) {
+        this.priority = priority;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
 }
