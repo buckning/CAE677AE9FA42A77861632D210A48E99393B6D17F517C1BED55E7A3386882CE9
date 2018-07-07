@@ -51,7 +51,7 @@ public class PriorityQueueService {
     public WorkOrderResponse getFromTopRequestFromQueue() {
         List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
 
-        if (allEntries.size() == 0) {
+        if (allEntries.isEmpty()) {
             throw new NotFoundException();
         }
 
@@ -81,6 +81,21 @@ public class PriorityQueueService {
         } else {
             return position;
         }
+    }
+
+    public Long getAverageWaitTime(String date) {
+        List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
+        if (allEntries.isEmpty()) {
+            return 0L;
+        }
+
+        Long totalWaitTime = 0L;
+
+        for (QueueEntry queueEntry: allEntries) {
+            totalWaitTime += dateProvider.getTimeDifferenceInSeconds(queueEntry.getDate(), date);
+        }
+
+        return totalWaitTime / allEntries.size();
     }
 
     public ClassIdType getClassId(Long id) {

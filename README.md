@@ -207,29 +207,42 @@ None
 
 # Get the average wait time
 ## Description
-An endpoint to get the average wait time. This endpoint should accept a single parameter, the current time, and should return the average (mean) number of seconds that each ID has been waiting in the queue.
+Get the average wait time for each request in the queue.
 
 
 ### URL
+http://(baseurl)/api/v1/queue/avg-wait-time
 
 ### URL Parameters
+None
 
 ### Method
+GET
 
 ### Request Headers
-
+None
 
 ### Request Body
 ```
-
+{
+    "fromTime": <Date>
+}
 ```
 
 ### Response Body
 ```
-
+{
+    "averageWaitTime": <Long>
+}
 ```
 
 ### Response Codes
+| Status Code | Description |
+|---------- |----------|
+| 200       | Request completed successfully |
+| 400 | Request is invalid |
+| 500 | An internal error was encountered by the service |
+| 503 | Request could not be completed as the service is unavailable |
 
 
 # Get the 95th percentile wait time

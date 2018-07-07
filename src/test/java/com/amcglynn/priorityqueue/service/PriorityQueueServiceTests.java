@@ -13,16 +13,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -115,6 +114,27 @@ public class PriorityQueueServiceTests {
         Throwable throwable = catchThrowable(() -> service.getUserPositionFromQueue(1L));
         assertThat(throwable).isNotNull();
         assertThat(throwable).isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    public void testGetAverageWaitTimeReturnsZeroWhenTheQueueIsEmpty() {
+        assertThat(service.getAverageWaitTime("2018-01-01-00-01-00")).isEqualTo(0L);
+    }
+
+    @Test
+    public void testGetAverageWaitTimeReturnsTheCorrectWaitTime() {
+        String date = "2018-01-01-00-01-00";
+
+        List<QueueEntry> queue = new ArrayList<>();
+        QueueEntry qe1 = new QueueEntry(1L, "2018-01-01-00-00-10", ClassIdType.NORMAL, 1L);
+        QueueEntry qe2 = new QueueEntry(2L, "2018-01-01-00-00-20", ClassIdType.NORMAL, 2L);
+        queue.add(qe1);
+        queue.add(qe2);
+
+        when(inMemoryQueueMock.getAllEntries()).thenReturn(queue);
+        when(dateProviderMock.getTimeDifferenceInSeconds(eq("2018-01-01-00-00-10"), eq(date))).thenReturn(50L);
+        when(dateProviderMock.getTimeDifferenceInSeconds(eq("2018-01-01-00-00-20"), eq(date))).thenReturn(40L);
+        assertThat(service.getAverageWaitTime(date)).isEqualTo(45L);
     }
 
     @Test

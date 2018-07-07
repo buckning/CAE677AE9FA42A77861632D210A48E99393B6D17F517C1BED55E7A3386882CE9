@@ -1,7 +1,9 @@
 package com.amcglynn.priorityqueue.rest;
 
 import com.amcglynn.priorityqueue.exceptions.BadRequestException;
+import com.amcglynn.priorityqueue.requests.AverageWaitTimeRequest;
 import com.amcglynn.priorityqueue.requests.WorkOrderRequest;
+import com.amcglynn.priorityqueue.responses.AverageWaitTimeResponse;
 import com.amcglynn.priorityqueue.responses.GetPositionResponse;
 import com.amcglynn.priorityqueue.responses.WorkOrderResponse;
 import com.amcglynn.priorityqueue.service.PriorityQueueService;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
@@ -57,5 +58,10 @@ public class PriorityQueueController {
     @RequestMapping(value = "queue", method = GET)
     public List<WorkOrderResponse> getAllIdsFromQueue() {
         return priorityQueueService.getAllEntries();
+    }
+
+    @RequestMapping(value = "queue/avg-wait-time", method = GET)
+    public AverageWaitTimeResponse getAverageWaitTime(@Valid @RequestBody AverageWaitTimeRequest request) {
+        return new AverageWaitTimeResponse(priorityQueueService.getAverageWaitTime(request.getFromTime()));
     }
 }

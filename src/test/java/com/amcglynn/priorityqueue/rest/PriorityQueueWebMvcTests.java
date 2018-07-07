@@ -1,7 +1,7 @@
 package com.amcglynn.priorityqueue.rest;
 
+import com.amcglynn.priorityqueue.requests.AverageWaitTimeRequest;
 import com.amcglynn.priorityqueue.requests.WorkOrderRequest;
-import com.amcglynn.priorityqueue.responses.GetPositionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,12 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -69,6 +67,31 @@ public class PriorityQueueWebMvcTests {
     @Test
     public void testDeleteEndpointReturns400BadRequestWhenUserIdIsNotALong() throws Exception {
         verifyBadRequestByDeleteFromQueueEndpoint("baddata");
+    }
+
+    @Test
+    public void testGetAverageWaitTimeEndpointReturns400BadRequestWhenDateIsNotSupplied() throws Exception {
+        mockMvc.perform(get("/queue/avg-wait-time")
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetAverageWaitTimeEndpointReturns400BadRequestWhenFromTimeIsInvalid() throws Exception {
+        mockMvc.perform(get("/queue/avg-wait-time")
+                .content("{\"fromTime\": \"0101010101010\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetAverageWaitTimeEndpointCompletesSuccessfully() throws Exception {
+        String request = new ObjectMapper().writeValueAsString(new AverageWaitTimeRequest("2018-01-01-01-01-00"));
+        mockMvc.perform(get("/queue/avg-wait-time")
+                .content(request)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isOk());
     }
 
     @Test
