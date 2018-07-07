@@ -55,16 +55,6 @@ public class PriorityQueueWebMvcTests {
     }
 
     @Test
-    public void testGetIdFromQueueReturnsSuccessfully() throws Exception {
-        String id = "1";
-        mockMvc.perform(get("/queue/" + id)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(status().isOk())
-        .andExpect(content().string(equalTo(new ObjectMapper()
-                .writeValueAsString(new GetPositionResponse(100L)))));
-    }
-
-    @Test
     public void testGetAllIdsFromQueueReturnsSuccessfully() throws Exception {
         mockMvc.perform(get("/queue")
                 .contentType(MediaType.APPLICATION_JSON))

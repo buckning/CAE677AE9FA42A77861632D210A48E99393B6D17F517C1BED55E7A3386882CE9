@@ -110,6 +110,20 @@ public class PriorityQueueServiceTests {
     }
 
     @Test
+    public void testGetUserPositionFromQueueThrowsNotFoundExceptionWhenIdIsNotInThQueue() {
+        when(inMemoryQueueMock.getUserPosition(1L)).thenReturn(-1L);
+        Throwable throwable = catchThrowable(() -> service.getUserPositionFromQueue(1L));
+        assertThat(throwable).isNotNull();
+        assertThat(throwable).isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    public void testGetUserPositionFromQueueReturnsSuccessfully() {
+        when(inMemoryQueueMock.getUserPosition(1L)).thenReturn(2L);
+        assertThat(service.getUserPositionFromQueue(1L)).isEqualTo(2L);
+    }
+
+    @Test
     public void testGetFromTopRequestFromQueueThrowsNotFoundExceptionWhenTheQueueIsEmpty() {
         when(inMemoryQueueMock.getAllEntries()).thenReturn(Arrays.asList());
         Throwable throwable = catchThrowable(() -> service.getFromTopRequestFromQueue());

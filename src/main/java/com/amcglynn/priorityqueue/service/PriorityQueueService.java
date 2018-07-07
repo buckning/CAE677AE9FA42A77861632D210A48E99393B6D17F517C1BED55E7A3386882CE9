@@ -74,7 +74,13 @@ public class PriorityQueueService {
     }
 
     public Long getUserPositionFromQueue(Long id) {
-        return inMemoryQueue.getUserPosition(id);
+        Long position = inMemoryQueue.getUserPosition(id);
+
+        if (position == -1) {
+            throw new NotFoundException();
+        } else {
+            return position;
+        }
     }
 
     public ClassIdType getClassId(Long id) {

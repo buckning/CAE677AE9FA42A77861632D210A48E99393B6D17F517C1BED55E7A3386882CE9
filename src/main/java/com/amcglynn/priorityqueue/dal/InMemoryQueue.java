@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class InMemoryQueue implements QueueDao {
     private List<QueueEntry> queueEntryList;
@@ -32,7 +33,15 @@ public class InMemoryQueue implements QueueDao {
 
     @Override
     public Long getUserPosition(Long id) {
-        return 100L;
+        Long position;
+        Optional<QueueEntry> queueEntry = queueEntryList.stream().filter((entry) -> entry.getId() == id).findFirst();
+        if (queueEntry.isPresent()) {
+            position = new Long(queueEntryList.indexOf(queueEntry.get()));
+        } else {
+            position = -1L;
+        }
+
+        return position;
     }
 
     public List<QueueEntry> getAllEntries() {
