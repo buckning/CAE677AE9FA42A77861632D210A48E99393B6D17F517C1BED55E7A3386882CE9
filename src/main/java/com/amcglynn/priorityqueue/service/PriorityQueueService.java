@@ -98,7 +98,14 @@ public class PriorityQueueService {
         Long totalWaitTime = 0L;
 
         for (QueueEntry queueEntry: allEntries) {
-            totalWaitTime += dateProvider.getTimeDifferenceInSeconds(queueEntry.getDate(), date);
+            long timeDifferenceForEntry = dateProvider.getTimeDifferenceInSeconds(queueEntry.getDate(), date);
+
+            if (timeDifferenceForEntry > 0) {
+                totalWaitTime += dateProvider.getTimeDifferenceInSeconds(queueEntry.getDate(), date);
+            } else {
+                LOG.info("ignoring time difference for ID: {} as it was not in the queue at the requested time",
+                        queueEntry.getId(), queueEntry.getDate());
+            }
         }
 
         return totalWaitTime / allEntries.size();

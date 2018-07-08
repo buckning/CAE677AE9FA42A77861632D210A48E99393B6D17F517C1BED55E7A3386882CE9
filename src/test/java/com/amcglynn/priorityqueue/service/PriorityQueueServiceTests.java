@@ -122,6 +122,21 @@ public class PriorityQueueServiceTests {
     }
 
     @Test
+    public void testGetAverageWaitTimeDoesNotProvideAWaitTimeWhenForEntriesThatWereNotInTheQueueAtTheRequestedTime() {
+        String date = "2017-01-01-00-01-00";
+
+        PriorityQueueService priorityQueueService = new PriorityQueueService(inMemoryQueueMock, new DateProvider());
+        List<QueueEntry> queue = new ArrayList<>();
+        QueueEntry qe1 = new QueueEntry(1L, "2018-01-01-00-00-10", ClassIdType.NORMAL, 1L);
+        QueueEntry qe2 = new QueueEntry(2L, "2018-01-01-00-00-20", ClassIdType.NORMAL, 2L);
+        queue.add(qe1);
+        queue.add(qe2);
+
+        when(inMemoryQueueMock.getAllEntries()).thenReturn(queue);
+        assertThat(priorityQueueService.getAverageWaitTime(date)).isEqualTo(0L);
+    }
+
+    @Test
     public void testGetAverageWaitTimeReturnsTheCorrectWaitTime() {
         String date = "2018-01-01-00-01-00";
 
