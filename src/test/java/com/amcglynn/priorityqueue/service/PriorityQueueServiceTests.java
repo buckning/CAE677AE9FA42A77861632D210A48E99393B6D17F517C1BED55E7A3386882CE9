@@ -144,6 +144,28 @@ public class PriorityQueueServiceTests {
     }
 
     @Test
+    public void testGet95thPercentileWaitTime() {
+        PriorityQueueService priorityQueueService = new PriorityQueueService(inMemoryQueueMock, new DateProvider());
+        List<QueueEntry> queue = new ArrayList<>();
+
+        queue.add(new QueueEntry(1L, "2018-01-01-00-00-00", ClassIdType.NORMAL, 1L));
+        queue.add(new QueueEntry(2L, "2018-01-01-00-00-05", ClassIdType.NORMAL, 2L));
+        queue.add(new QueueEntry(3L, "2018-01-01-00-00-10", ClassIdType.PRIORITY, 3L));
+        queue.add(new QueueEntry(4L, "2018-01-01-00-00-15", ClassIdType.NORMAL, 4L));
+        queue.add(new QueueEntry(5L, "2018-01-01-00-00-20", ClassIdType.VIP, 5L));
+        queue.add(new QueueEntry(6L, "2018-01-01-00-00-25", ClassIdType.PRIORITY, 6L));
+        queue.add(new QueueEntry(7L, "2018-01-01-00-00-30", ClassIdType.NORMAL, 7L));
+        queue.add(new QueueEntry(8L, "2018-01-01-00-00-35", ClassIdType.NORMAL, 8L));
+        queue.add(new QueueEntry(9L, "2018-01-01-00-00-40", ClassIdType.PRIORITY, 9L));
+        queue.add(new QueueEntry(10L, "2018-01-01-00-00-45", ClassIdType.VIP, 10L));
+
+        when(inMemoryQueueMock.getAllEntries()).thenReturn(queue);
+        Long waitTime95thPercentile = priorityQueueService.get95thPercentileWaitTime("2018-01-01-00-01-00");
+
+        assertThat(waitTime95thPercentile).isEqualTo(60L);
+    }
+
+    @Test
     public void testGetFromTopRequestFromQueueThrowsNotFoundExceptionWhenTheQueueIsEmpty() {
         when(inMemoryQueueMock.getAllEntries()).thenReturn(Arrays.asList());
         Throwable throwable = catchThrowable(() -> service.getFromTopRequestFromQueue());

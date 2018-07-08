@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,11 @@ public class PriorityQueueService {
 
     @Autowired
     private DateProvider dateProvider;
+
+    public PriorityQueueService(InMemoryQueue inMemoryQueue, DateProvider dateProvider) {
+        this.inMemoryQueue = inMemoryQueue;
+        this.dateProvider = dateProvider;
+    }
 
     public WorkOrderResponse createEntryInQueue(Long id, String date) {
         if(inMemoryQueue.contains(id)) {
@@ -96,6 +102,18 @@ public class PriorityQueueService {
         }
 
         return totalWaitTime / allEntries.size();
+    }
+
+    public Long get95thPercentileWaitTime(String date) {
+        List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
+        List<Long> waitTimes = allEntries.stream()
+                .map((entry) -> dateProvider.getTimeDifferenceInSeconds(entry.getDate(), date))
+                .collect(Collectors.toList());
+        Collections.sort(waitTimes);
+
+        int index = (int) Math.ceil(0.95 * waitTimes.size()) - 1;
+
+        return waitTimes.get(index);
     }
 
     public ClassIdType getClassId(Long id) {

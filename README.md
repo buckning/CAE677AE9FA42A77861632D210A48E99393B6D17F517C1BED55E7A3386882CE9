@@ -220,7 +220,10 @@ None
 GET
 
 ### Request Headers
-None
+| Header name | Description |
+| --- | --- |
+| Content-Type | Content type of the request. application/json is the only supported content type |
+
 
 ### Request Body
 ```
@@ -247,25 +250,35 @@ None
 
 # Get the 95th percentile wait time
 ## Description
-An endpoint to get the 95th percentile wait time of all IDs over time. This endpoint should return the 95th percentile of number of seconds IDs have been waiting in the queue since the application started.
+An endpoint to get the 95th percentile wait time of all IDs over time. 
+This endpoint returns the 95th percentile of number of seconds IDs have been waiting 
+in the queue since the application started.
 
 ### URL
-
+http://(baseurl)/api/v1/queue/percentile95
 
 ### URL Parameters
+None
 
 ### Method
+GET
 
 ### Request Headers
+None
 
 ### Request Body
-```
-
-```
+None
 
 ### Response Body
 ```
-
+{
+    "percentile95": <Long>
+}
 ```
 
 ### Response Codes
+| Status Code | Description |
+|---------- |----------|
+| 200       | Request completed successfully |
+| 500 | An internal error was encountered by the service |
+| 503 | Request could not be completed as the service is unavailable |

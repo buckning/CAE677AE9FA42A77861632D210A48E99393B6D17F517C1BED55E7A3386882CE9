@@ -1,12 +1,9 @@
 package com.amcglynn.priorityqueue.dal;
 
 import com.amcglynn.priorityqueue.ClassIdType;
-import com.amcglynn.priorityqueue.responses.WorkOrderResponse;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class InMemoryQueue implements QueueDao {
