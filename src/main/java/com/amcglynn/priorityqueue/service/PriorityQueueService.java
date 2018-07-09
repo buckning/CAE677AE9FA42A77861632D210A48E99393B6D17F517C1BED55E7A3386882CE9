@@ -71,9 +71,13 @@ public class PriorityQueueService {
     public Long getRank(ClassIdType classIdType, String date) {
         Long numberOfSecondsInQueue = dateProvider.getTimeDifferenceInSeconds(date, dateProvider.getCurrentTime());
 
-        Long rank = -1L;
+        Long rank;
 
-        if (classIdType == ClassIdType.NORMAL) {
+        if (classIdType == ClassIdType.PRIORITY) {
+            rank = (long) Math.max(3, numberOfSecondsInQueue * Math.log(numberOfSecondsInQueue));
+        } else if (classIdType == ClassIdType.VIP) {
+            rank = (long) Math.max(4, 2 * numberOfSecondsInQueue * Math.log(numberOfSecondsInQueue));
+        } else {
             rank = numberOfSecondsInQueue;
         }
         return rank;

@@ -33,7 +33,7 @@ public class InMemoryQueue implements QueueDao {
         Long position;
         Optional<QueueEntry> queueEntry = queueEntryList.stream().filter((entry) -> entry.getId() == id).findFirst();
         if (queueEntry.isPresent()) {
-            position = new Long(queueEntryList.indexOf(queueEntry.get()));
+            position = Long.valueOf(queueEntryList.indexOf(queueEntry.get()));
         } else {
             position = -1L;
         }

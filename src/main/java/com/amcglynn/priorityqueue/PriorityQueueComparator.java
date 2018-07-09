@@ -36,9 +36,4 @@ public class PriorityQueueComparator implements Comparator<QueueEntry> {
 
         return 0;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return false;
-    }
 }

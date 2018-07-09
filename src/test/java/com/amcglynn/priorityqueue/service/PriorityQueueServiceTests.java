@@ -51,7 +51,7 @@ public class PriorityQueueServiceTests {
         Long userId = 1L;
         String date = "2018-01-01-00-00-00";
         when(dateProviderMock.getCurrentTime()).thenReturn("2018-01-01-00-00-10");
-        when(dateProviderMock.getTimeDifferenceInSeconds(anyString(), anyString())).thenReturn(new Long(10L));
+        when(dateProviderMock.getTimeDifferenceInSeconds(anyString(), anyString())).thenReturn(Long.valueOf(10L));
 
         WorkOrderResponse response = service.createEntryInQueue(userId, date);
 
@@ -62,10 +62,31 @@ public class PriorityQueueServiceTests {
     }
 
     @Test
-    public void testGetRankReturnsTheNumberOfSecondsInTheQueueForNormalId() {
+    public void testGetRankForNormalId() {
         when(dateProviderMock.getCurrentTime()).thenReturn("2018-01-01-00-00-10");
-        when(dateProviderMock.getTimeDifferenceInSeconds(anyString(), anyString())).thenReturn(new Long(10L));
+        when(dateProviderMock.getTimeDifferenceInSeconds(anyString(), anyString())).thenReturn(Long.valueOf(10L));
         assertThat(service.getRank(ClassIdType.NORMAL, "2018-01-01-00-00-00")).isEqualTo(10L);
+    }
+
+    @Test
+    public void testGetRankForManagementOverrideId() {
+        when(dateProviderMock.getCurrentTime()).thenReturn("2018-01-01-00-00-10");
+        when(dateProviderMock.getTimeDifferenceInSeconds(anyString(), anyString())).thenReturn(Long.valueOf(10L));
+        assertThat(service.getRank(ClassIdType.MANAGEMENT_OVERRIDE, "2018-01-01-00-00-00")).isEqualTo(10L);
+    }
+
+    @Test
+    public void testGetRankForPriorityId() {
+        when(dateProviderMock.getCurrentTime()).thenReturn("2018-01-01-00-00-10");
+        when(dateProviderMock.getTimeDifferenceInSeconds(anyString(), anyString())).thenReturn(Long.valueOf(10L));
+        assertThat(service.getRank(ClassIdType.PRIORITY, "2018-01-01-00-00-00")).isEqualTo(23L);
+    }
+
+    @Test
+    public void testGetRankForVipPriorityId() {
+        when(dateProviderMock.getCurrentTime()).thenReturn("2018-01-01-00-00-10");
+        when(dateProviderMock.getTimeDifferenceInSeconds(anyString(), anyString())).thenReturn(Long.valueOf(10L));
+        assertThat(service.getRank(ClassIdType.VIP, "2018-01-01-00-00-00")).isEqualTo(46L);
     }
 
     @Test
