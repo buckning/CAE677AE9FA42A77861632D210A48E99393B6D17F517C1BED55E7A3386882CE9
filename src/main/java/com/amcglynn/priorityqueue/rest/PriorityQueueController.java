@@ -4,6 +4,7 @@ import com.amcglynn.priorityqueue.DateProvider;
 import com.amcglynn.priorityqueue.exceptions.BadRequestException;
 import com.amcglynn.priorityqueue.requests.WorkOrderRequest;
 import com.amcglynn.priorityqueue.responses.AverageWaitTimeResponse;
+import com.amcglynn.priorityqueue.responses.GetAllIdsResponse;
 import com.amcglynn.priorityqueue.responses.GetPositionResponse;
 import com.amcglynn.priorityqueue.responses.Percentile95Response;
 import com.amcglynn.priorityqueue.responses.WorkOrderResponse;
@@ -61,8 +62,8 @@ public class PriorityQueueController {
     }
 
     @RequestMapping(value = "queue", method = GET)
-    public List<WorkOrderResponse> getAllIdsFromQueue() {
-        return priorityQueueService.getAllEntries();
+    public GetAllIdsResponse getAllIdsFromQueue() {
+        return new GetAllIdsResponse(priorityQueueService.getAllEntries());
     }
 
     @RequestMapping(value = "queue/avg-wait-time/{fromDate}", method = GET)

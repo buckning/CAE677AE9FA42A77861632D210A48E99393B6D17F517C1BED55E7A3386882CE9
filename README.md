@@ -1,3 +1,20 @@
+# Priority Queue Service
+The Priority Queue Service is a RESTful microservice which allows the management of work orders. The service provides APIs for adding 
+The service provides the following functionality
+* Add work orders to the queue
+* Pop work orders off the queue
+* Query specific work orders
+* Query the list of open work orders
+* Removal of work orders
+* Query the average wait time of orders in the queue
+* Query the 95th percentile of wait time of orders in the queue
+
+There are 4 types of priorities used by the system. Priorities are specified through the ID of the user.
+* Normal
+* Priority (evenly divisible by 3)
+* VIP   (evenly divisible by 5)
+* Management Override (evenly divisible by 3 and 5)
+
 # Build the project and run tests
 ```
 mvn verify
@@ -53,8 +70,7 @@ POST
 ```
 {
     "userId": <Long>,
-    "date": <date>,
-    "rank": <Long>
+    "date": <date>
 }
 ```
 
@@ -89,7 +105,7 @@ None
 ### Response Body
 ```
 {
-	"rank": <Long>,
+	"userId": <Long>,
 	"date": <date>
 }
 ```
@@ -122,7 +138,7 @@ None
 ### Response Body
 ```
 {
-	"ids": [<IDs>]
+	"allIds": [<IDs>]
 }
 ```
 
@@ -173,7 +189,7 @@ None
 
 # Get the position of an ID in the queue
 ## Description
-Get the position of an ID in the queue
+Get the position of an ID in the queue. Note that positions start at 0.
 
 
 ### URL
