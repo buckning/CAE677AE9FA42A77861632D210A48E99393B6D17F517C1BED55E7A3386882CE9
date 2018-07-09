@@ -42,15 +42,14 @@ public class PriorityQueueService {
         Long rank = getRank(classIdType, date);
         inMemoryQueue.create(id, date, classIdType, rank);
 
-        return new WorkOrderResponse(id, rank, date);
+        return new WorkOrderResponse(id, date);
     }
 
     public List<WorkOrderResponse> getAllEntries() {
         List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
         allEntries.sort(new PriorityQueueComparator(dateProvider));
         return allEntries.stream()
-                .map((queueEntry -> new WorkOrderResponse(queueEntry.getId(),
-                        queueEntry.getRank(), queueEntry.getDate())))
+                .map((queueEntry -> new WorkOrderResponse(queueEntry.getId(), queueEntry.getDate())))
                 .collect(Collectors.toList());
     }
 
@@ -65,7 +64,7 @@ public class PriorityQueueService {
 
         QueueEntry entry = allEntries.remove(0);
         inMemoryQueue.delete(entry.getId());
-        return new WorkOrderResponse(entry.getId(), entry.getRank(), entry.getDate());
+        return new WorkOrderResponse(entry.getId(), entry.getDate());
     }
 
     public Long getRank(ClassIdType classIdType, String date) {
