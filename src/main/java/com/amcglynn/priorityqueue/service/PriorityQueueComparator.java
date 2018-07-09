@@ -1,4 +1,4 @@
-package com.amcglynn.priorityqueue;
+package com.amcglynn.priorityqueue.service;
 
 import com.amcglynn.priorityqueue.dal.QueueEntry;
 import org.springframework.beans.factory.annotation.Autowired;

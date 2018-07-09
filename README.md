@@ -20,7 +20,7 @@ There are 4 types of priorities used by the system. Priorities are specified thr
 mvn verify
 ```
 
-# Deploy the service
+# Deploy the service locally
 ```
 mvn spring-boot:run
 ```
@@ -31,6 +31,7 @@ To import this into Postman, click on the **Import** button on the top left corn
 Each API can then be run against the running service by clicking on the request in the left hand panel.
 Then click on the **Send** button on the main panel in Postman. Notice that some APIs require some modification 
 with real data before a request is valid and accepted by the service.
+
 
 # Queue Service API Definition
 

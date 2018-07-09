@@ -1,7 +1,5 @@
 package com.amcglynn.priorityqueue.service;
 
-import com.amcglynn.priorityqueue.ClassIdType;
-import com.amcglynn.priorityqueue.DateProvider;
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
 import com.amcglynn.priorityqueue.dal.QueueEntry;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;
@@ -41,7 +39,7 @@ public class PriorityQueueServiceTests {
     @Test
     public void testCreateEntryInQueueThrows409ConflictExceptionWhenIdIsAlreadyInQueue() {
         when(inMemoryQueueMock.contains(1L)).thenReturn(true);
-        Throwable throwable = catchThrowable(() -> service.createEntryInQueue(1L, "01012018"));
+        Throwable throwable = catchThrowable(() -> service.createEntryInQueue(1L, "2018-01-01-00-00-10"));
         assertThat(throwable).isNotNull();
         assertThat(throwable).isInstanceOf(ConflictException.class);
     }

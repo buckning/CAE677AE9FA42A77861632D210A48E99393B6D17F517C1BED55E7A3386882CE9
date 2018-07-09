@@ -1,4 +1,4 @@
-package com.amcglynn.priorityqueue;
+package com.amcglynn.priorityqueue.service;
 
 public enum ClassIdType {
     NORMAL(0),

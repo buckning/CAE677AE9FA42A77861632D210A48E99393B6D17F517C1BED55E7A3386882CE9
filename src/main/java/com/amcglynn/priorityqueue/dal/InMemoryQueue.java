@@ -1,6 +1,6 @@
 package com.amcglynn.priorityqueue.dal;
 
-import com.amcglynn.priorityqueue.ClassIdType;
+import com.amcglynn.priorityqueue.service.ClassIdType;
 
 import java.util.ArrayList;
 import java.util.List;

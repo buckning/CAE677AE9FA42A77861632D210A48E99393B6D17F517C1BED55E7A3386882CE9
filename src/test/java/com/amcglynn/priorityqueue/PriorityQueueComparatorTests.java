@@ -1,6 +1,9 @@
 package com.amcglynn.priorityqueue;
 
 import com.amcglynn.priorityqueue.dal.QueueEntry;
+import com.amcglynn.priorityqueue.service.ClassIdType;
+import com.amcglynn.priorityqueue.service.DateProvider;
+import com.amcglynn.priorityqueue.service.PriorityQueueComparator;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;

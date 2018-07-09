@@ -1,4 +1,4 @@
-package com.amcglynn.priorityqueue;
+package com.amcglynn.priorityqueue.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,6 +1,7 @@
 package com.amcglynn.priorityqueue;
 
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
+import com.amcglynn.priorityqueue.service.DateProvider;
 import com.amcglynn.priorityqueue.validation.validators.DateValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

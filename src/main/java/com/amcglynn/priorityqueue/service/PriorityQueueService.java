@@ -1,8 +1,5 @@
 package com.amcglynn.priorityqueue.service;
 
-import com.amcglynn.priorityqueue.ClassIdType;
-import com.amcglynn.priorityqueue.DateProvider;
-import com.amcglynn.priorityqueue.PriorityQueueComparator;
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
 import com.amcglynn.priorityqueue.dal.QueueEntry;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;

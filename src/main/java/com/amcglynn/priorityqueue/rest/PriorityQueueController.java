@@ -1,6 +1,6 @@
 package com.amcglynn.priorityqueue.rest;
 
-import com.amcglynn.priorityqueue.DateProvider;
+import com.amcglynn.priorityqueue.service.DateProvider;
 import com.amcglynn.priorityqueue.exceptions.BadRequestException;
 import com.amcglynn.priorityqueue.requests.WorkOrderRequest;
 import com.amcglynn.priorityqueue.responses.AverageWaitTimeResponse;
@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
-import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;

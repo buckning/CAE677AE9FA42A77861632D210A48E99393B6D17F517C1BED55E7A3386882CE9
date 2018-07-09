@@ -1,5 +1,6 @@
 package com.amcglynn.priorityqueue;
 
+import com.amcglynn.priorityqueue.service.DateProvider;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

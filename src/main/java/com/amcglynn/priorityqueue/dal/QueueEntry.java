@@ -1,7 +1,6 @@
 package com.amcglynn.priorityqueue.dal;
 
-import com.amcglynn.priorityqueue.ClassIdType;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.amcglynn.priorityqueue.service.ClassIdType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class QueueEntry {
