@@ -87,9 +87,7 @@ public class PriorityQueueWebMvcTests {
 
     @Test
     public void testGetAverageWaitTimeEndpointCompletesSuccessfully() throws Exception {
-        String request = new ObjectMapper().writeValueAsString(new AverageWaitTimeRequest("2018-01-01-01-01-00"));
-        mockMvc.perform(get("/queue/avg-wait-time")
-                .content(request)
+        mockMvc.perform(get("/queue/avg-wait-time/2018-01-01-01-01-00")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isOk());
     }

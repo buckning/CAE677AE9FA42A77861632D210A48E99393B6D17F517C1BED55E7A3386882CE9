@@ -1,9 +1,9 @@
 package com.amcglynn.priorityqueue.rest;
 
 import com.amcglynn.priorityqueue.exceptions.BadRequestException;
-import com.amcglynn.priorityqueue.exceptions.ConflictException;
 import com.amcglynn.priorityqueue.responses.GetPositionResponse;
 import com.amcglynn.priorityqueue.service.PriorityQueueService;
+import com.amcglynn.priorityqueue.validation.validators.DateValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -21,6 +21,9 @@ public class PriorityQueueControllerTests {
 
     @Mock
     private PriorityQueueService serviceMock;
+
+    @Mock
+    private DateValidator dateValidator;
 
     @InjectMocks
     private PriorityQueueController controller;
@@ -55,6 +58,15 @@ public class PriorityQueueControllerTests {
     @Test
     public void testDeleteFromQueueEndpointReturns400BadRequestWhenUserIdIsANegativeNumber() throws Exception {
         Throwable throwable = catchThrowable(() -> controller.deleteFromQueue(-1L));
+        assertThat(throwable).isNotNull();
+        assertThat(throwable).isInstanceOf(BadRequestException.class);
+    }
+
+    @Test
+
+    public void testGetAverageWaitTimeReturns400BadRequestWhenFromDateIsInvalid() {
+        when(dateValidator.isValid("20180101010101", null)).thenReturn(false);
+        Throwable throwable = catchThrowable(() -> controller.getAverageWaitTime("20180101010101"));
         assertThat(throwable).isNotNull();
         assertThat(throwable).isInstanceOf(BadRequestException.class);
     }

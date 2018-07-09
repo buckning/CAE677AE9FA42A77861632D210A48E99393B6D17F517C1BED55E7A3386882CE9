@@ -15,7 +15,7 @@ mvn spring-boot:run
 Add an ID to the queue
 
 ### URL
-http://(baseurl)/api/v1/queue
+http://(baseurl)/queue
 
 ### URL Parameters
 None
@@ -68,7 +68,7 @@ POST
 Get the top ID from the queue. This pulls from the top of the queue and removes it from the queue.
 
 ### URL
-http://(baseurl)/api/v1/queue/top
+http://(baseurl)/queue/top
 
 ### URL Parameters
 None
@@ -101,7 +101,7 @@ None
 Get a list of all the IDs in the queue, this is sorted from highest rank to lowest
 
 ### URL
-http://(baseurl)/api/v1/queue
+http://(baseurl)/queue
 
 ### Method
 GET
@@ -132,7 +132,7 @@ None
 Remove a specific ID from the queue
 
 ### URL
-http://(baseurl)/api/v1/queue/\<id\>
+http://(baseurl)/queue/\<id\>
 
 ### Method
 DELETE
@@ -170,7 +170,7 @@ Get the position of an ID in the queue
 
 
 ### URL
-http://(baseurl)/api/v1/queue/\<id\>
+http://(baseurl)/queue/\<id\>
 
 ### URL Parameters
 | Parameter name | Description |
@@ -211,7 +211,7 @@ Get the average wait time for each request in the queue.
 
 
 ### URL
-http://(baseurl)/api/v1/queue/avg-wait-time
+http://(baseurl)/queue/avg-wait-time/{from-date}
 
 ### URL Parameters
 None
@@ -220,17 +220,10 @@ None
 GET
 
 ### Request Headers
-| Header name | Description |
-| --- | --- |
-| Content-Type | Content type of the request. application/json is the only supported content type |
-
+None
 
 ### Request Body
-```
-{
-    "fromTime": <Date>
-}
-```
+None
 
 ### Response Body
 ```
@@ -255,7 +248,7 @@ This endpoint returns the 95th percentile of number of seconds IDs have been wai
 in the queue since the application started.
 
 ### URL
-http://(baseurl)/api/v1/queue/percentile95
+http://(baseurl)/queue/percentile95
 
 ### URL Parameters
 None
