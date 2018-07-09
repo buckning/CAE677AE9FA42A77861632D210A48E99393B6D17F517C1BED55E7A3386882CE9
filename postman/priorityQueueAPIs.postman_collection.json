@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "ed783b63-9faa-4821-9c81-ae68670f2e7b",
+		"name": "Priority Queue APIs",
+		"description": "Collection of sample requests for the Priority Queue Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/queue",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userId\": 1,\n\t\"date\": \"2018-07-09-19-12-20\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/queue",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"queue"
+					]
+				},
+				"description": "Add an ID to the queue. User ID must be between 1 and 9223372036854775807\nDate must be in the format of yyyy-MM-dd-HH-mm-ss"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/queue/top",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/queue/top",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"queue",
+						"top"
+					]
+				},
+				"description": "Get the top ID from the queue. This pulls from the top of the queue and removes it from the queue."
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/queue",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/queue",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"queue"
+					]
+				},
+				"description": "Get a list of all the IDs in the queue, this is sorted from highest rank to lowest"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/queue/{insert-id-here}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/queue/{insert-id-here}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"queue",
+						"{insert-id-here}"
+					]
+				},
+				"description": "Get the position of an ID in the queue"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/queue/{insert-id-here}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/queue/{insert-id-here}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"queue",
+						"{insert-id-here}"
+					]
+				},
+				"description": "Remove a specific ID from the queue"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/queue/avg-wait-time/{fromDate}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/queue/avg-wait-time/{fromDate}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"queue",
+						"avg-wait-time",
+						"{fromDate}"
+					]
+				},
+				"description": "Get the average wait time for each request in the queue."
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/queue/percentile95",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/queue/percentile95",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"queue",
+						"percentile95"
+					]
+				},
+				"description": "An endpoint to get the 95th percentile wait time of all IDs over time. \nThis endpoint returns the 95th percentile of number of seconds IDs have been waiting \nin the queue since the application started."
+			},
+			"response": []
+		}
+	]
+}

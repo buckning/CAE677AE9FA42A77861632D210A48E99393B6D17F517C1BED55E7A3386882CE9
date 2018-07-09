@@ -8,6 +8,13 @@ mvn verify
 mvn spring-boot:run
 ```
 
+# Postman Suite
+A Postman suite containing all APIs provided by the service is included in this project. 
+To import this into Postman, click on the **Import** button on the top left corner of Postman.
+Each API can then be run against the running service by clicking on the request in the left hand panel.
+Then click on the **Send** button on the main panel in Postman. Notice that some APIs require some modification 
+with real data before a request is valid and accepted by the service.
+
 # Queue Service API Definition
 
 # Add to queue
