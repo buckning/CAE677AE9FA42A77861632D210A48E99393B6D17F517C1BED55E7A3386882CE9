@@ -47,8 +47,8 @@ public class InMemoryQueueTest {
         inMemoryQueue.create(1L, "2018-01-01-00-00-01", ClassIdType.NORMAL, 1L);
         inMemoryQueue.create(3L, "2018-01-01-00-00-03", ClassIdType.PRIORITY, 3L);
 
-        assertThat(inMemoryQueue.getUserPosition(1L)).isEqualTo(0L);
-        assertThat(inMemoryQueue.getUserPosition(3L)).isEqualTo(1L);
+        assertThat(inMemoryQueue.getUserPosition(1L)).isEqualTo(1L);
+        assertThat(inMemoryQueue.getUserPosition(3L)).isEqualTo(0L);
     }
 
     @Test

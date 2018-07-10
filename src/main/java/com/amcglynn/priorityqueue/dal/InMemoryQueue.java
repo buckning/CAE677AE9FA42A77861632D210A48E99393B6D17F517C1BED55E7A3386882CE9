@@ -1,6 +1,9 @@
 package com.amcglynn.priorityqueue.dal;
 
 import com.amcglynn.priorityqueue.service.ClassIdType;
+import com.amcglynn.priorityqueue.service.DateProvider;
+import com.amcglynn.priorityqueue.service.PriorityQueueComparator;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +12,9 @@ import java.util.Optional;
 public class InMemoryQueue implements QueueDao {
     private List<QueueEntry> queueEntryList;
     private List<Long> completedTasksWaitTime;
+
+    @Autowired
+    private DateProvider dateProvider;
 
     public InMemoryQueue() {
         this.queueEntryList = new ArrayList<>();
@@ -43,6 +49,7 @@ public class InMemoryQueue implements QueueDao {
     @Override
     public Long getUserPosition(Long id) {
         Long position;
+        queueEntryList.sort(new PriorityQueueComparator(dateProvider));
         Optional<QueueEntry> queueEntry = queueEntryList.stream().filter((entry) -> entry.getId() == id).findFirst();
         if (queueEntry.isPresent()) {
             position = Long.valueOf(queueEntryList.indexOf(queueEntry.get()));
