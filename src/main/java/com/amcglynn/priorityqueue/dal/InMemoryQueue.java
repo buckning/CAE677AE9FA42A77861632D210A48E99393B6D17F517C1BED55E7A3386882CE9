@@ -8,9 +8,16 @@ import java.util.Optional;
 
 public class InMemoryQueue implements QueueDao {
     private List<QueueEntry> queueEntryList;
+    private List<Long> completedTasksWaitTime;
 
     public InMemoryQueue() {
         this.queueEntryList = new ArrayList<>();
+        this.completedTasksWaitTime = new ArrayList<>();
+    }
+
+    @Override
+    public void addWaitTimeForCompletedTask(Long completedTaskWaitTime) {
+        completedTasksWaitTime.add(completedTaskWaitTime);
     }
 
     @Override
@@ -19,8 +26,13 @@ public class InMemoryQueue implements QueueDao {
     }
 
     @Override
+    public Optional<QueueEntry> getEntry(Long id) {
+        return queueEntryList.stream().filter((entry) -> entry.getId() == id).findFirst();
+    }
+
+    @Override
     public boolean contains(Long id) {
-        return queueEntryList.stream().filter((entry) -> entry.getId() == id).findFirst().isPresent();
+        return getEntry(id).isPresent();
     }
 
     @Override
@@ -47,5 +59,9 @@ public class InMemoryQueue implements QueueDao {
 
     public String getDate(Long id) {
         return queueEntryList.stream().filter((entry) -> entry.getId() == id).findFirst().get().getDate();
+    }
+
+    public List<Long> getWaitTimesForCompletedTasks() {
+        return completedTasksWaitTime;
     }
 }

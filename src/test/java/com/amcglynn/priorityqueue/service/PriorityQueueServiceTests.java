@@ -14,6 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -96,9 +97,12 @@ public class PriorityQueueServiceTests {
         unorderedMockQueueContents.add(qe2);
 
         when(inMemoryQueueMock.getAllEntries()).thenReturn(unorderedMockQueueContents);
+        when(dateProviderMock.getCurrentTime()).thenReturn("2018-01-01-00-00-12");
+        when(dateProviderMock.getTimeDifferenceInSeconds("2018-01-01-00-00-02", "2018-01-01-00-00-12")).thenReturn(10L);
         WorkOrderResponse response = service.getFromTopRequestFromQueue();
 
         verify(inMemoryQueueMock, times(1)).delete(qe2.getId());
+        verify(inMemoryQueueMock, times(1)).addWaitTimeForCompletedTask(10L);
 
         assertThat(response.getUserId()).isEqualTo(qe2.getId());
         assertThat(response.getDate()).isEqualTo(qe2.getDate());
@@ -192,10 +196,33 @@ public class PriorityQueueServiceTests {
         queue.add(new QueueEntry(9L, "2018-01-01-00-00-40", ClassIdType.PRIORITY, 9L));
         queue.add(new QueueEntry(10L, "2018-01-01-00-00-45", ClassIdType.VIP, 10L));
 
+        List<Long> waitTimeQueueForCompeletedTasks = new ArrayList<>();
+        waitTimeQueueForCompeletedTasks.add(20L);
+        waitTimeQueueForCompeletedTasks.add(10L);
+        waitTimeQueueForCompeletedTasks.add(10L);
+
+        when(inMemoryQueueMock.getWaitTimesForCompletedTasks()).thenReturn(waitTimeQueueForCompeletedTasks);
         when(inMemoryQueueMock.getAllEntries()).thenReturn(queue);
         Long waitTime95thPercentile = priorityQueueService.get95thPercentileWaitTime("2018-01-01-00-01-00");
 
         assertThat(waitTime95thPercentile).isEqualTo(60L);
+    }
+
+    @Test
+    public void testGet95thPercentileWaitTimeForCompletedTasks() {
+        PriorityQueueService priorityQueueService = new PriorityQueueService(inMemoryQueueMock, new DateProvider());
+        List<QueueEntry> queue = new ArrayList<>();
+
+        queue.add(new QueueEntry(1L, "2018-01-01-00-00-00", ClassIdType.NORMAL, 1L));
+
+        List<Long> waitTimeQueueForCompeletedTasks = new ArrayList<>();
+        waitTimeQueueForCompeletedTasks.add(1000L);
+
+        when(inMemoryQueueMock.getWaitTimesForCompletedTasks()).thenReturn(waitTimeQueueForCompeletedTasks);
+        when(inMemoryQueueMock.getAllEntries()).thenReturn(queue);
+        Long waitTime95thPercentile = priorityQueueService.get95thPercentileWaitTime("2018-01-01-00-01-00");
+
+        assertThat(waitTime95thPercentile).isEqualTo(1000L);
     }
 
     @Test
@@ -204,5 +231,16 @@ public class PriorityQueueServiceTests {
         Throwable throwable = catchThrowable(() -> service.getFromTopRequestFromQueue());
         assertThat(throwable).isNotNull();
         assertThat(throwable).isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    public void testRemoveFromQueueRemovesEntryFromQueueAndSavesTheWaitTimeToTheDb() {
+        when(inMemoryQueueMock.getEntry(1L)).thenReturn(
+                Optional.of(new QueueEntry(1L, "2018-01-01-00-01-00", ClassIdType.NORMAL, 20L)));
+        when(dateProviderMock.getCurrentTime()).thenReturn("2018-01-01-00-01-10");
+        when(dateProviderMock.getTimeDifferenceInSeconds("2018-01-01-00-01-00", "2018-01-01-00-01-10")).thenReturn(10L);
+        service.removeFromQueue(1L);
+        verify(inMemoryQueueMock, times(1)).addWaitTimeForCompletedTask(10L);
+        verify(inMemoryQueueMock, times(1)).delete(1L);
     }
 }

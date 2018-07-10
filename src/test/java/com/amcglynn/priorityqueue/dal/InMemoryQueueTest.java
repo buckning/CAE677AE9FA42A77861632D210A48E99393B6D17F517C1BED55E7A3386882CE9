@@ -3,6 +3,8 @@ package com.amcglynn.priorityqueue.dal;
 import com.amcglynn.priorityqueue.service.ClassIdType;
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class InMemoryQueueTest {
@@ -53,5 +55,25 @@ public class InMemoryQueueTest {
     public void testGetUserPositionReturnsMinusOneWhenUserNotFound() {
         InMemoryQueue inMemoryQueue = new InMemoryQueue();
         assertThat(inMemoryQueue.getUserPosition(1L)).isEqualTo(-1L);
+    }
+
+    @Test
+    public void testGetEntry() {
+        InMemoryQueue inMemoryQueue = new InMemoryQueue();
+        inMemoryQueue.create(1L, "2018-01-01-00-00-01", ClassIdType.NORMAL, 1L);
+        Optional<QueueEntry> entry = inMemoryQueue.getEntry(1L);
+        assertThat(entry.isPresent()).isTrue();
+        QueueEntry queueEntry = entry.get();
+        assertThat(queueEntry.getId()).isEqualTo(1L);
+        assertThat(queueEntry.getDate()).isEqualTo("2018-01-01-00-00-01");
+        assertThat(queueEntry.getClassIdType()).isEqualTo(ClassIdType.NORMAL);
+        assertThat(queueEntry.getRank()).isEqualTo(1L);
+    }
+
+    @Test
+    public void testGetEntryDoesNotExist() {
+        InMemoryQueue inMemoryQueue = new InMemoryQueue();
+        Optional<QueueEntry> entry = inMemoryQueue.getEntry(1L);
+        assertThat(entry.isPresent()).isFalse();
     }
 }

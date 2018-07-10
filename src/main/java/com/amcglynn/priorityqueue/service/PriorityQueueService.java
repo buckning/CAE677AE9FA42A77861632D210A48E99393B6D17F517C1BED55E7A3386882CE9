@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("priorityQueueService")
@@ -61,6 +62,8 @@ public class PriorityQueueService {
 
         QueueEntry entry = allEntries.remove(0);
         inMemoryQueue.delete(entry.getId());
+        inMemoryQueue.addWaitTimeForCompletedTask(dateProvider
+                .getTimeDifferenceInSeconds(entry.getDate(), dateProvider.getCurrentTime()));
         return new WorkOrderResponse(entry.getId(), entry.getDate());
     }
 
@@ -116,6 +119,7 @@ public class PriorityQueueService {
         List<Long> waitTimes = allEntries.stream()
                 .map((entry) -> dateProvider.getTimeDifferenceInSeconds(entry.getDate(), date))
                 .collect(Collectors.toList());
+        waitTimes.addAll(inMemoryQueue.getWaitTimesForCompletedTasks());
         Collections.sort(waitTimes);
 
         int index = (int) Math.ceil(0.95 * waitTimes.size()) - 1;
@@ -124,6 +128,12 @@ public class PriorityQueueService {
     }
 
     public void removeFromQueue(Long userId) {
-        inMemoryQueue.delete(userId);
+        Optional<QueueEntry> queueEntry = inMemoryQueue.getEntry(userId);
+        if (queueEntry.isPresent()) {
+            QueueEntry entry = queueEntry.get();
+            inMemoryQueue.delete(userId);
+            inMemoryQueue.addWaitTimeForCompletedTask(dateProvider
+                    .getTimeDifferenceInSeconds(entry.getDate(), dateProvider.getCurrentTime()));
+        }
     }
 }
