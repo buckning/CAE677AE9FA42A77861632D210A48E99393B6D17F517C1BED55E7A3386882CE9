@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Comparator;
 
+/***
+ * This class is used to sort the queue based on rank and ID Class.
+ */
 public class PriorityQueueComparator implements Comparator<QueueEntry> {
     private DateProvider dateProvider;
 

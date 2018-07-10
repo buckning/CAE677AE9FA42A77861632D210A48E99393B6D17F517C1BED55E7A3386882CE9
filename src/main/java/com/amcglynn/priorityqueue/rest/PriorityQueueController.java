@@ -32,11 +32,21 @@ public class PriorityQueueController {
     @Autowired
     private DateValidator dateValidator;
 
+    /***
+     * Add to the queue
+     * @param request request body
+     * @return response
+     */
     @RequestMapping(value = "queue", method = POST)
     public WorkOrderResponse enqueue(@Valid @RequestBody WorkOrderRequest request) {
         return priorityQueueService.createEntryInQueue(request.getUserId(), request.getDate());
     }
 
+    /***
+     * Delete a specific entry from the queue
+     * @param userId id to be removed
+     * @return 204 - No Content
+     */
     @RequestMapping(value = "queue/{userId}", method = DELETE)
     public ResponseEntity deleteFromQueue(@PathVariable("userId") Long userId) {
         if (userId < 1) {
@@ -46,6 +56,11 @@ public class PriorityQueueController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /***
+     * Get a specific entry from the queue
+     * @param userId ID being looked up
+     * @return response
+     */
     @RequestMapping(value = "queue/{userId}", method = GET)
     public GetPositionResponse getIdFromQueue(@PathVariable("userId") Long userId) {
         if (userId < 1) {
@@ -54,16 +69,29 @@ public class PriorityQueueController {
         return new GetPositionResponse(priorityQueueService.getUserPositionFromQueue(userId));
     }
 
+    /***
+     * Get the entry that is on the top of the queue
+     * @return the entry on top of the queue
+     */
     @RequestMapping(value = "queue/top", method = GET)
     public WorkOrderResponse getTopIdFromQueue() {
         return priorityQueueService.getFromTopRequestFromQueue();
     }
 
+    /***
+     * Get all entries in the queue
+     * @return list of entries in the queue
+     */
     @RequestMapping(value = "queue", method = GET)
     public GetAllIdsResponse getAllIdsFromQueue() {
         return new GetAllIdsResponse(priorityQueueService.getAllEntries());
     }
 
+    /***
+     * Get the average wait time for requests in the queue
+     * @param fromDate date from which the average wait time will be based off
+     * @return The average wait time
+     */
     @RequestMapping(value = "queue/avg-wait-time/{fromDate}", method = GET)
     public AverageWaitTimeResponse getAverageWaitTime(@PathVariable String fromDate) {
         if (!dateValidator.isValid(fromDate, null)) {
@@ -72,6 +100,10 @@ public class PriorityQueueController {
         return new AverageWaitTimeResponse(priorityQueueService.getAverageWaitTime(fromDate));
     }
 
+    /***
+     * Get the 95th percentile of the wait time from the queue
+     * @return 95th percentile wait time
+     */
     @RequestMapping(value = "queue/percentile95", method = GET)
     public Percentile95Response get95thPercentile() {
         return new Percentile95Response(priorityQueueService
