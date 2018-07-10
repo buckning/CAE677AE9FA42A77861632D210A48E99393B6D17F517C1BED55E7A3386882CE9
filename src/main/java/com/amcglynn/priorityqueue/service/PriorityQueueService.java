@@ -35,7 +35,7 @@ public class PriorityQueueService {
             throw new ConflictException();
         }
 
-        ClassIdType classIdType = getClassId(id);
+        ClassIdType classIdType = ClassIdType.fromValue(id);
         Long rank = getRank(classIdType, date);
         inMemoryQueue.create(id, date, classIdType, rank);
 
@@ -121,25 +121,6 @@ public class PriorityQueueService {
         int index = (int) Math.ceil(0.95 * waitTimes.size()) - 1;
 
         return waitTimes.get(index);
-    }
-
-    public ClassIdType getClassId(Long id) {
-        ClassIdType result;
-        boolean priorityId = id % 3 == 0;
-        boolean vipId = id % 5 == 0;
-        boolean managementOverrideId = priorityId && vipId;
-
-        if (managementOverrideId) {
-            result = ClassIdType.MANAGEMENT_OVERRIDE;
-        } else if (priorityId) {
-            result = ClassIdType.PRIORITY;
-        } else if (vipId) {
-            result = ClassIdType.VIP;
-        } else {
-            result = ClassIdType.NORMAL;
-        }
-
-        return result;
     }
 
     public void removeFromQueue(Long userId) {

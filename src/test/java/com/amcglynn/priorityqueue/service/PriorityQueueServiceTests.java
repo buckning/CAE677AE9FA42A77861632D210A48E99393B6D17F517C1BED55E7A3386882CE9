@@ -205,24 +205,4 @@ public class PriorityQueueServiceTests {
         assertThat(throwable).isNotNull();
         assertThat(throwable).isInstanceOf(NotFoundException.class);
     }
-
-    @Test
-    public void testGetIdClassForNormalId() {
-        assertThat(service.getClassId(1L)).isEqualTo(ClassIdType.NORMAL);
-    }
-
-    @Test
-    public void testGetIdClassForPriorityId() {
-        assertThat(service.getClassId(3L)).isEqualTo(ClassIdType.PRIORITY);
-    }
-
-    @Test
-    public void testGetIdClassForVipId() {
-        assertThat(service.getClassId(5L)).isEqualTo(ClassIdType.VIP);
-    }
-
-    @Test
-    public void testGetIdClassForManagementOverrideId() {
-        assertThat(service.getClassId(15L)).isEqualTo(ClassIdType.MANAGEMENT_OVERRIDE);
-    }
 }
