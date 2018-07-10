@@ -53,6 +53,7 @@ public class InMemoryQueue implements QueueDao {
         return position;
     }
 
+    @Override
     public List<QueueEntry> getAllEntries() {
         return new ArrayList<>(queueEntryList);
     }
@@ -61,6 +62,7 @@ public class InMemoryQueue implements QueueDao {
         return queueEntryList.stream().filter((entry) -> entry.getId() == id).findFirst().get().getDate();
     }
 
+    @Override
     public List<Long> getWaitTimesForCompletedTasks() {
         return completedTasksWaitTime;
     }

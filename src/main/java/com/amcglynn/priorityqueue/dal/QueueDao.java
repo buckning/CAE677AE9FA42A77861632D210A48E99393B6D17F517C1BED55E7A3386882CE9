@@ -2,6 +2,7 @@ package com.amcglynn.priorityqueue.dal;
 
 import com.amcglynn.priorityqueue.service.ClassIdType;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface QueueDao {
@@ -11,4 +12,6 @@ public interface QueueDao {
     Long getUserPosition(Long id);
     void addWaitTimeForCompletedTask(Long completedTaskWaitTime);
     Optional<QueueEntry> getEntry(Long id);
+    List<QueueEntry> getAllEntries();
+    List<Long> getWaitTimesForCompletedTasks();
 }

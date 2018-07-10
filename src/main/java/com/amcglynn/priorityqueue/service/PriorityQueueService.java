@@ -1,6 +1,7 @@
 package com.amcglynn.priorityqueue.service;
 
 import com.amcglynn.priorityqueue.dal.InMemoryQueue;
+import com.amcglynn.priorityqueue.dal.QueueDao;
 import com.amcglynn.priorityqueue.dal.QueueEntry;
 import com.amcglynn.priorityqueue.exceptions.ConflictException;
 import com.amcglynn.priorityqueue.exceptions.NotFoundException;
@@ -20,31 +21,31 @@ public class PriorityQueueService {
     private static final Logger LOG = LoggerFactory.getLogger(PriorityQueueService.class);
 
     @Autowired
-    private InMemoryQueue inMemoryQueue;
+    private QueueDao queueDao;
 
     @Autowired
     private DateProvider dateProvider;
 
-    public PriorityQueueService(InMemoryQueue inMemoryQueue, DateProvider dateProvider) {
-        this.inMemoryQueue = inMemoryQueue;
+    public PriorityQueueService(QueueDao queueDao, DateProvider dateProvider) {
+        this.queueDao = queueDao;
         this.dateProvider = dateProvider;
     }
 
     public WorkOrderResponse createEntryInQueue(Long id, String date) {
-        if(inMemoryQueue.contains(id)) {
+        if(queueDao.contains(id)) {
             LOG.info("Could not create entry in queue for ID: {} as entry already exists", id);
             throw new ConflictException();
         }
 
         ClassIdType classIdType = ClassIdType.fromValue(id);
         Long rank = getRank(classIdType, date);
-        inMemoryQueue.create(id, date, classIdType, rank);
+        queueDao.create(id, date, classIdType, rank);
 
         return new WorkOrderResponse(id, date);
     }
 
     public List<WorkOrderResponse> getAllEntries() {
-        List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
+        List<QueueEntry> allEntries = queueDao.getAllEntries();
         allEntries.sort(new PriorityQueueComparator(dateProvider));
         return allEntries.stream()
                 .map((queueEntry -> new WorkOrderResponse(queueEntry.getId(), queueEntry.getDate())))
@@ -52,7 +53,7 @@ public class PriorityQueueService {
     }
 
     public WorkOrderResponse getFromTopRequestFromQueue() {
-        List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
+        List<QueueEntry> allEntries = queueDao.getAllEntries();
 
         if (allEntries.isEmpty()) {
             throw new NotFoundException();
@@ -61,8 +62,8 @@ public class PriorityQueueService {
         allEntries.sort(new PriorityQueueComparator(dateProvider));
 
         QueueEntry entry = allEntries.remove(0);
-        inMemoryQueue.delete(entry.getId());
-        inMemoryQueue.addWaitTimeForCompletedTask(dateProvider
+        queueDao.delete(entry.getId());
+        queueDao.addWaitTimeForCompletedTask(dateProvider
                 .getTimeDifferenceInSeconds(entry.getDate(), dateProvider.getCurrentTime()));
         return new WorkOrderResponse(entry.getId(), entry.getDate());
     }
@@ -83,7 +84,7 @@ public class PriorityQueueService {
     }
 
     public Long getUserPositionFromQueue(Long id) {
-        Long position = inMemoryQueue.getUserPosition(id);
+        Long position = queueDao.getUserPosition(id);
 
         if (position == -1) {
             throw new NotFoundException();
@@ -93,7 +94,7 @@ public class PriorityQueueService {
     }
 
     public Long getAverageWaitTime(String date) {
-        List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
+        List<QueueEntry> allEntries = queueDao.getAllEntries();
         if (allEntries.isEmpty()) {
             return 0L;
         }
@@ -115,11 +116,11 @@ public class PriorityQueueService {
     }
 
     public Long get95thPercentileWaitTime(String date) {
-        List<QueueEntry> allEntries = inMemoryQueue.getAllEntries();
+        List<QueueEntry> allEntries = queueDao.getAllEntries();
         List<Long> waitTimes = allEntries.stream()
                 .map((entry) -> dateProvider.getTimeDifferenceInSeconds(entry.getDate(), date))
                 .collect(Collectors.toList());
-        waitTimes.addAll(inMemoryQueue.getWaitTimesForCompletedTasks());
+        waitTimes.addAll(queueDao.getWaitTimesForCompletedTasks());
         Collections.sort(waitTimes);
 
         int index = (int) Math.ceil(0.95 * waitTimes.size()) - 1;
@@ -128,11 +129,11 @@ public class PriorityQueueService {
     }
 
     public void removeFromQueue(Long userId) {
-        Optional<QueueEntry> queueEntry = inMemoryQueue.getEntry(userId);
+        Optional<QueueEntry> queueEntry = queueDao.getEntry(userId);
         if (queueEntry.isPresent()) {
             QueueEntry entry = queueEntry.get();
-            inMemoryQueue.delete(userId);
-            inMemoryQueue.addWaitTimeForCompletedTask(dateProvider
+            queueDao.delete(userId);
+            queueDao.addWaitTimeForCompletedTask(dateProvider
                     .getTimeDifferenceInSeconds(entry.getDate(), dateProvider.getCurrentTime()));
         }
     }

@@ -15,6 +15,10 @@ There are 4 types of priorities used by the system. Priorities are specified thr
 * VIP   (evenly divisible by 5)
 * Management Override (evenly divisible by 3 and 5)
 
+Note that this project uses an in memory cache for storing data, so all data will be lost on restart. 
+This can be modified easily by creating a DAO for the specific data source and implement the QueueDao interface. 
+The queueDao() bean can then be instantiated with a different data source instead of the InMemoryQueue object. 
+
 # Build the project and run tests
 ```
 mvn verify
